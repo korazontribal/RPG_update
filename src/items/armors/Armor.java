@@ -10,6 +10,10 @@ public abstract class Armor extends Item {
         super(name, description);
     }
 
+    public Armor() {
+        super("", "");
+    }
+
     public abstract void effect();
 
     public int getDef() {

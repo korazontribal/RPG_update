@@ -9,7 +9,6 @@ public class IronHelmet extends Armor {
     private int counter;
 
     public IronHelmet(int str) {
-        super("", "");
         this.description = "Casco lujoso de hierro endeble";
         this.def = 5;
         this.name = "Casco de Hierro";
