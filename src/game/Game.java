@@ -7,9 +7,8 @@ import player.Player;
 import util.Randomized;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static util.Randomized.randomize;
+import static util.Randomized.randomizeNumber;
 
 public class Game {
     private Player player;
@@ -24,7 +23,7 @@ public class Game {
 
         for (int i = 0; i < 3; i++) {
 
-            switch (randomize(0, 1)) {
+            switch (Randomized.randomizeNumber(0, 1)) {
                 case 0 -> enemies.add(new RookieGoblin());
                 case 1 -> enemies.add(new AloneWolf());
             }

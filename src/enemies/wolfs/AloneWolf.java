@@ -4,8 +4,9 @@ import enemies.Enemy;
 import player.Player;
 import player.debuffs.Debuff;
 import player.debuffs.DebuffType;
+import util.Randomized;
 
-import static util.Randomized.randomize;
+import static util.Randomized.randomizeNumber;
 
 public class AloneWolf extends Enemy {
 
@@ -17,7 +18,7 @@ public class AloneWolf extends Enemy {
     @Override
     public void attack(Player player) {
 
-        switch (randomize(0, 2)) {
+        switch (Randomized.randomizeNumber(0, 2)) {
 
             case 0 -> simpleAttack(player);
             case 1 -> howl(player);
