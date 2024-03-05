@@ -39,14 +39,7 @@ public class Inventory {
 	 */
 	public void addItem(Item item) {
 
-		// Versión corta de la línea 19
-		// System.out.println(items.add(item) ? item.getName() + " has been added to your inventory." : "Inventory is full.");
-		if (items.add(item)) {
-
-			System.out.println(item.getName() + " has been added to your inventory.");
-		} else {
-			System.out.println("Inventory is full.");
-		}
+		System.out.println(items.add(item) ? item.getName() + " has been added to your inventory." : "Inventory is full.");
 	}
 
 	/**

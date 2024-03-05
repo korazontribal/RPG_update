@@ -3,24 +3,17 @@ package items.weapons;
 import items.Item;
 
 public abstract class Weapon extends Item {
-    protected String name;
-    protected String description;
-    protected int atk;
 
-    public Weapon(String name, String description, int atk) {
-        super(name, description);
-        this.atk = atk;
-    }
+	protected int atk;
 
-    public String getName() {
-        return name;
-    }
+	public Weapon(String name, String description, int price, int atk) {
 
-    public String getDescription() {
-        return description;
-    }
+		super(name, description, price);
+		this.atk = atk;
+	}
 
-    public int getAtk() {
-        return atk;
-    }
+	public int getAtk() {
+
+		return atk;
+	}
 }

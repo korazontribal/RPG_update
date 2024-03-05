@@ -9,6 +9,7 @@ public abstract class BasicCharacter {
     protected int maxMp;
 
     public BasicCharacter(String name, int hp, int mp) {
+
         this.name = name;
         this.hp = hp;
         this.mp = mp;
@@ -24,16 +25,13 @@ public abstract class BasicCharacter {
 
     public void heal(int amount) {
         hp += amount;
-        if (hp > maxHp) {
-            hp = maxHp;
-        }
+        if (hp > maxHp) hp = maxHp;
     }
 
     public void recoverMp(int amount) {
+
         mp += amount;
-        if (mp > maxMp) {
-            mp = maxMp;
-        }
+        if (mp > maxMp) mp = maxMp;
     }
 
     public void useMp(int amount) {

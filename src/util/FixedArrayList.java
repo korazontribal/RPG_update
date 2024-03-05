@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * @param <T> the type of elements in the list
  *
  * @author jesus
+ * @version 1.0
  */
 public class FixedArrayList<T> extends ArrayList<T> {
 	private int capacity;

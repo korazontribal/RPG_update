@@ -6,15 +6,16 @@ import javax.swing.*;
 
 public class WoodHelmet extends Armor {
 
-    public WoodHelmet() {
-        super("", "");
-        this.description = "Casco sencillo de madera";
-        this.def = 1;
-        this.name = "Casco de Madera";
-    }
+	public WoodHelmet() {
 
-    @Override
-    public void effect() {
-        JOptionPane.showMessageDialog(null, "Sin Efectos");
-    }
+		super("Casco de Madera",
+				"Un casco de madera que no protege mucho, pero es mejor que nada.", 5, 1);
+		this.def = 1;
+	}
+
+	@Override
+	public void effect() {
+
+		JOptionPane.showMessageDialog(null, "Sin Efectos");
+	}
 }

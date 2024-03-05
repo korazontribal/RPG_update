@@ -4,32 +4,30 @@ import javax.swing.*;
 
 public abstract class Item {
 
-    protected String name;
-    protected String description;
+	protected final String name;
+	protected final String description;
+	protected final int price;
 
-    public Item(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+	public Item(String name, String description, int price) {
 
-    public void displayData() {
-        JOptionPane.showMessageDialog(null,
-                String.format("%s", description));
-    }
+		this.name = name;
+		this.description = description;
+		this.price = price;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void displayData() {
 
-    public void setName(String name) {
-        this.name = name;
-    }
+		JOptionPane.showMessageDialog(null,
+				String.format("%s", description));
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getName() {
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+		return name;
+	}
+
+	public String getDescription() {
+
+		return description;
+	}
 }

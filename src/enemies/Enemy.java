@@ -10,6 +10,7 @@ public abstract class Enemy {
     private final int experience;
 
     public Enemy(String name, int health, int damage, int gold, int experience) {
+
         this.name = name;
         this.health = health;
         this.damage = damage;
@@ -42,6 +43,7 @@ public abstract class Enemy {
     }
 
     public void takeDamage(int damage) {
+
         System.out.println(name + " takes " + damage + " damage!");
         health -= damage;
         if (isDead())

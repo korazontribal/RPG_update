@@ -10,10 +10,24 @@ import util.Randomized;
 
 import java.util.ArrayList;
 
+/**
+ * Un jugador es un personaje que puede luchar contra enemigos, ganar experiencia y oro, y equipar armas y armaduras.
+ *
+ * @version 1.0
+ * @autor jesus
+ */
 public class Player extends BasicCharacter {
-
+	/**
+	 * La fuerza del jugador.
+	 */
 	private int strength;
+	/**
+	 * La defensa del jugador.
+	 */
 	private int defense;
+	/**
+	 * La inteligencia del jugador.
+	 */
 	private int intelligence;
 	private int dexterity;
 	private int luck;
@@ -23,7 +37,7 @@ public class Player extends BasicCharacter {
 	private ArrayList<Debuff> debuffs;
 	private Weapon weapon;
 	private Armor armor;
-	private Inventory inventory;
+	private final Inventory inventory;
 
 	public Player(String name) {
 
@@ -73,8 +87,7 @@ public class Player extends BasicCharacter {
 	public void attack(Enemy enemy) {
 
 		System.out.println(getName() + " attacks for " + getDamage() + " damage!");
-		if (weapon != null) enemy.takeDamage(getDamage());
-		else enemy.takeDamage(getDamage());
+		enemy.takeDamage(getDamage());
 		if (enemy.isDead()) {
 
 			gainExperience(enemy.getExperience());
@@ -102,20 +115,18 @@ public class Player extends BasicCharacter {
 
 		damage -= defense;
 		if (armor != null) {
+
 			damage -= armor.getDef();
-			if (damage < 0) {
-				damage = 0;
-			}
+			if (damage < 0) damage = 0;
 		}
 		for (Debuff debuff : debuffs) {
+
 			damage += debuff.getDamage();
 			debuff.reduceDuration();
 			if (debuff.getDuration() == 0) debuffs.remove(debuff);
 		}
 		super.takeDamage(damage);
-		if (isDead()) {
-			printDeath();
-		}
+		if (isDead()) printDeath();
 	}
 
 	public void gainExperience(int experience) {
@@ -123,6 +134,7 @@ public class Player extends BasicCharacter {
 		this.experience += experience;
 		System.out.println("You have gained " + experience + " experience!");
 		if (this.experience >= level * 20) {
+
 			level++;
 			strength++;
 			defense++;
@@ -141,23 +153,6 @@ public class Player extends BasicCharacter {
 	public void gainGold(int gold) {
 
 		this.gold += gold;
-	}
-
-	public void printInventory() {
-
-		System.out.println("Weapon: " + (weapon != null ? weapon.getName() : "None"));
-		System.out.println("Armor: " + (armor != null ? armor.getName() : "None"));
-	}
-
-	public String printActions() {
-
-		return "Que harás frente a tu enemigo:\n1. atacar\n2. defender\n3. huir";
-	}
-
-	public void printEquipmentActions() {
-
-		System.out.println("1. Equip Weapon");
-		System.out.println("2. Equip Armor");
 	}
 
 	public void printLevelUp() {
@@ -301,5 +296,10 @@ public class Player extends BasicCharacter {
 	public String getName() {
 
 		return super.getName();
+	}
+
+	public Inventory getInventory() {
+
+		return inventory;
 	}
 }

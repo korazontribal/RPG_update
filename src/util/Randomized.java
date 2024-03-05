@@ -6,13 +6,8 @@ import java.util.Random;
  * Randomized es una interfaz que proporciona métodos para generar números aleatorios, así como valores booleanos como
  * si de una moneda se tratara.
  *
+ * @autor jesus
  * @version 1.0
- * @see Random
- * @see Random#nextInt(int)
- * @see Random#nextBoolean()
- * @see Random#nextDouble()
- * @see Random#nextDouble()
- * @since 1.0
  */
 public interface Randomized {
 
