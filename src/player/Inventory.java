@@ -3,6 +3,8 @@ package player;
 import items.Item;
 import util.FixedArrayList;
 
+import javax.swing.*;
+
 /**
  * Inventory es una clase que representa el inventario del jugador.
  *
@@ -69,12 +71,15 @@ public class Inventory {
 
 		if (items.isEmpty()) {
 
-			System.out.println("Inventory is empty.");
+			JOptionPane.showMessageDialog(null, "Inventario Vació.");
 		} else {
-			System.out.println("Inventory:");
+			String message = "Inventario:\n";
+			String itemMessage;
 			for (Item item : items) {
-				System.out.println(item.getName() + " - " + item.getDescription());
+				itemMessage = String.format("%s - %s\n", item.getName(), item.getDescription());
+				message += itemMessage;
 			}
+			JOptionPane.showMessageDialog(null, message);
 		}
 	}
 }

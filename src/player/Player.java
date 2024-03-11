@@ -2,13 +2,16 @@ package player;
 
 import characters.BasicCharacter;
 import enemies.Enemy;
+import game.exceptions.InvalidOptionException;
 import items.armors.Armor;
 import items.weapons.Weapon;
 import org.jetbrains.annotations.NotNull;
 import player.debuffs.Debuff;
 import util.Randomized;
 
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Un jugador es un personaje que puede luchar contra enemigos, ganar experiencia y oro, y equipar armas y armaduras.
@@ -42,14 +45,76 @@ public class Player extends BasicCharacter {
 	public Player(String name) {
 
 		super(name, 30, 10);
-		randomizeStats(30);
 		debuffs = new ArrayList<>(5);
 		experience = 0;
 		level = 1;
 		gold = 0;
 		weapon = null;
 		armor = null;
+		randomizeStats(30);
 		inventory = new Inventory();
+	}
+
+	public void play(List<Enemy> enemies) {
+
+		JOptionPane.showMessageDialog(null, "Bienvenido a la aventura, " + getName() + "!");
+		while (!enemies.isEmpty()) {
+
+			String menu = "1. Ver estadísticas\n2. Ver inventario\n3. Luchar\n4. Salir";
+			Enemy currentEnemy;
+			try {
+				int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
+				switch (option) {
+					case 1 -> displayData();
+					case 2 -> inventory.printItems();
+					case 3 -> {
+						currentEnemy = getEnemy(enemies);
+						while (!currentEnemy.isDead() && !isDead()) {
+
+							attackMenu(currentEnemy);
+						}
+						enemies.remove(currentEnemy);
+					}
+					case 4 -> {
+						JOptionPane.showMessageDialog(null, "Gracias por jugar");
+						enemies.clear();
+					}
+					default -> throw new InvalidOptionException();
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "La opción ingresada no es válida");
+			}
+		}
+	}
+
+	@NotNull
+	private static Enemy getEnemy(List<Enemy> enemies) {
+
+		Enemy enemy = enemies.get(Randomized.randomizeNumber(0, enemies.size() - 1));
+		JOptionPane.showMessageDialog(null, "Un " + enemy.getName() + " aparece!");
+		return enemy;
+	}
+
+	private void attackMenu(Enemy enemy) {
+
+		try {
+			String battleMenu = "1. Atacar\n2. Huir";
+			int battleOption = Integer.parseInt(JOptionPane.showInputDialog(battleMenu));
+			switch (battleOption) {
+				case 1 -> attack(enemy);
+				case 2 -> {
+					if (Randomized.randomizeBoolean()) {
+						printRun();
+						enemy.setHealth(0);
+					} else JOptionPane.showMessageDialog(null, "No has podido huir!");
+				}
+				default -> throw new InvalidOptionException();
+			}
+			if (!enemy.isDead()) enemy.attack(this);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "La opción ingresada no es válida");
+			attackMenu(enemy);
+		}
 	}
 
 	public void randomizeStats(int maxPoints) {
@@ -84,9 +149,10 @@ public class Player extends BasicCharacter {
 		this.armor = armor;
 	}
 
-	public void attack(Enemy enemy) {
+	public void attack(@NotNull Enemy enemy) {
 
-		System.out.println(getName() + " attacks for " + getDamage() + " damage!");
+		String message = String.format("%s ataca con %d puntos de daño!", getName(), getDamage());
+		JOptionPane.showMessageDialog(null, message);
 		enemy.takeDamage(getDamage());
 		if (enemy.isDead()) {
 

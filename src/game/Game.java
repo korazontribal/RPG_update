@@ -2,55 +2,49 @@ package game;
 
 import enemies.Enemy;
 import enemies.goblins.RookieGoblin;
-import enemies.wolfs.AloneWolf;
+import game.exceptions.InvalidOptionException;
 import player.Player;
-import util.Randomized;
 
+import javax.swing.*;
 import java.util.ArrayList;
-
-import static util.Randomized.randomizeNumber;
+import java.util.List;
 
 public class Game {
-    private Player player;
-    private ArrayList<Enemy> enemies;
-    public Game(Player player) {
+	private Player player;
+	private final List<Enemy> enemies;
 
-        this.player = player;
-        enemies = new ArrayList<>(3);
-    }
+	public Game() {
 
-    private void randomizeEnemies() {
+		player = null;
+		enemies = new ArrayList<>(3);
+		enemies.add(new RookieGoblin());
+		enemies.add(new RookieGoblin());
+		enemies.add(new RookieGoblin());
+	}
 
-        for (int i = 0; i < 3; i++) {
+	public static void main(String[] args) {
 
-            switch (Randomized.randomizeNumber(0, 1)) {
-                case 0 -> enemies.add(new RookieGoblin());
-                case 1 -> enemies.add(new AloneWolf());
-            }
-        }
-    }
-    public void start() {
+		Game game = new Game();
+		game.printMenu();
+	}
 
-        randomizeEnemies();
-        System.out.println("You are fighting " + enemies.size() + " enemies!");
-        int selection = 0;
-        player.printActions();
-        for (Enemy enemy : enemies) {
-            while (!player.isDead() && !enemy.isDead()) {
-                player.attack(enemy);
-                if (!enemy.isDead()) {
-                    enemy.attack(player);
-                }
-            }
-            if (player.isDead()) {
-                System.out.println("You died!");
-                break;
-            }
-            player.heal(5);
-            player.recoverMp(5);
-        }
-        if (!player.isDead()) {
-            System.out.println("You won!");
-        }
-    }
+	public void printMenu() {
+
+		String menu = "1. Jugar\n2. Salir";
+		try {
+			int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
+			switch (option) {
+				case 1 -> {
+					player = new Player(JOptionPane.showInputDialog("Ingresa el nombre del jugador:"));
+					player.play(enemies);
+				}
+				case 2 -> JOptionPane.showMessageDialog(null, "Gracias por jugar");
+				default -> throw new InvalidOptionException();
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "La opción ingresada no es válida");
+			printMenu();
+		}
+	}
+
 }
