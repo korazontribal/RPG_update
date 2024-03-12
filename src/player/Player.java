@@ -7,6 +7,7 @@ import items.armors.Armor;
 import items.weapons.Weapon;
 import org.jetbrains.annotations.NotNull;
 import player.debuffs.Debuff;
+import util.Interactive;
 import util.Randomized;
 
 import javax.swing.*;
@@ -55,68 +56,6 @@ public class Player extends BasicCharacter {
 		inventory = new Inventory();
 	}
 
-	public void play(List<Enemy> enemies) {
-
-		JOptionPane.showMessageDialog(null, "Bienvenido a la aventura, " + getName() + "!");
-		while (!enemies.isEmpty()) {
-
-			String menu = "1. Ver estadísticas\n2. Ver inventario\n3. Luchar\n4. Salir";
-			Enemy currentEnemy;
-			try {
-				int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
-				switch (option) {
-					case 1 -> displayData();
-					case 2 -> inventory.printItems();
-					case 3 -> {
-						currentEnemy = getEnemy(enemies);
-						while (!currentEnemy.isDead() && !isDead()) {
-
-							attackMenu(currentEnemy);
-						}
-						enemies.remove(currentEnemy);
-					}
-					case 4 -> {
-						JOptionPane.showMessageDialog(null, "Gracias por jugar");
-						enemies.clear();
-					}
-					default -> throw new InvalidOptionException();
-				}
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "La opción ingresada no es válida");
-			}
-		}
-	}
-
-	@NotNull
-	private static Enemy getEnemy(List<Enemy> enemies) {
-
-		Enemy enemy = enemies.get(Randomized.randomizeNumber(0, enemies.size() - 1));
-		JOptionPane.showMessageDialog(null, "Un " + enemy.getName() + " aparece!");
-		return enemy;
-	}
-
-	private void attackMenu(Enemy enemy) {
-
-		try {
-			String battleMenu = "1. Atacar\n2. Huir";
-			int battleOption = Integer.parseInt(JOptionPane.showInputDialog(battleMenu));
-			switch (battleOption) {
-				case 1 -> attack(enemy);
-				case 2 -> {
-					if (Randomized.randomizeBoolean()) {
-						printRun();
-						enemy.setHealth(0);
-					} else JOptionPane.showMessageDialog(null, "No has podido huir!");
-				}
-				default -> throw new InvalidOptionException();
-			}
-			if (!enemy.isDead()) enemy.attack(this);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "La opción ingresada no es válida");
-			attackMenu(enemy);
-		}
-	}
-
 	public void randomizeStats(int maxPoints) {
 
 		int stat = Randomized.randomizeNumber(1, 5);
@@ -151,8 +90,7 @@ public class Player extends BasicCharacter {
 
 	public void attack(@NotNull Enemy enemy) {
 
-		String message = String.format("%s ataca con %d puntos de daño!", getName(), getDamage());
-		JOptionPane.showMessageDialog(null, message);
+		Interactive.printDialog(String.format("%s ataca con %d puntos de daño!", getName(), getDamage()));
 		enemy.takeDamage(getDamage());
 		if (enemy.isDead()) {
 
@@ -164,17 +102,23 @@ public class Player extends BasicCharacter {
 	@Override
 	public void displayData() {
 
-		System.out.println("Name: " + getName());
-		System.out.println("Level: " + level);
-		System.out.println("Experience: " + experience + "/" + level * 10);
-		System.out.println("Health: " + getMaxHp());
-		System.out.println("Mana: " + getMaxMp());
-		System.out.println("Strength: " + strength);
-		System.out.println("Defense: " + defense);
-		System.out.println("Intelligence: " + intelligence);
-		System.out.println("Dexterity: " + dexterity);
-		System.out.println("Luck: " + luck);
-		System.out.println("Gold: " + gold);
+		String message = String.format("""
+						Nombre: %s
+						Nivel: %d
+						Experiencia: %d/%d
+						Salud: %d
+						Mana: %d
+						Fuerza: %d
+						Defensa: %d
+						Inteligencia: %d
+						Destreza: %d
+						Suerte: %d
+						Oro: %d
+						Arma: %s
+						Armadura: %s""",
+				getName(), level, experience, level * 20, getMaxHp(), getMaxMp(), strength, defense, intelligence,
+				dexterity, luck, gold, getWeaponName(), getArmorName());
+		Interactive.printDialog(message);
 	}
 
 	public void takeDamage(int damage) {
@@ -198,7 +142,7 @@ public class Player extends BasicCharacter {
 	public void gainExperience(int experience) {
 
 		this.experience += experience;
-		System.out.println("You have gained " + experience + " experience!");
+		Interactive.printDialog(String.format("Has ganado %d puntos de experiencia!", experience));
 		if (this.experience >= level * 20) {
 
 			level++;
@@ -223,53 +167,53 @@ public class Player extends BasicCharacter {
 
 	public void printLevelUp() {
 
-		System.out.println("Congratulations! You have leveled up to level " + level + "!");
+		Interactive.printDialog(String.format("¡Felicidades! Has subido al nivel %d!", level));
 		displayData();
 	}
 
 	public void printDeath() {
 
-		System.out.println("You have died!");
+		Interactive.printDialog("¡Has muerto!");
 	}
 
 	public void printRun() {
 
-		System.out.println("You have successfully ran away!");
+		Interactive.printDialog("¡Has huido!");
 	}
 
 	public void printGold(int gold) {
 
-		System.out.println("You have gained " + gold + " gold!");
+		Interactive.printDialog(String.format("Has ganado %d monedas de oro!", gold));
 	}
 
 	public void printExperience(int experience) {
 
-		System.out.println("You have gained " + experience + " experience!");
+		Interactive.printDialog(String.format("Has ganado %d puntos de experiencia!", experience));
 	}
 
 	public void printHeal(int heal) {
 
-		System.out.println("You have healed for " + heal + " health!");
+		Interactive.printDialog(String.format("Has recuperado %d puntos de salud!", heal));
 	}
 
 	public void printEquipWeapon(@NotNull Weapon weapon) {
 
-		System.out.println("You have equipped " + weapon.getName() + "!");
+		Interactive.printDialog(String.format("Has equipado %s!", weapon.getName()));
 	}
 
 	public void printEquipArmor(@NotNull Armor armor) {
 
-		System.out.println("You have equipped " + armor.getName() + "!");
+		Interactive.printDialog(String.format("Has equipado %s!", armor.getName()));
 	}
 
 	public void printUnequipWeapon(@NotNull Weapon weapon) {
 
-		System.out.println("You have unequipped " + weapon.getName() + "!");
+		Interactive.printDialog(String.format("Has desequipado %s!", weapon.getName()));
 	}
 
 	public void printUnequipArmor(@NotNull Armor armor) {
 
-		System.out.println("You have unequipped " + armor.getName() + "!");
+		Interactive.printDialog(String.format("Has desequipado %s!", armor.getName()));
 	}
 
 	//Getters and Setters

@@ -2,22 +2,12 @@ package player;
 
 import items.Item;
 import util.FixedArrayList;
-
-import javax.swing.*;
+import util.Interactive;
 
 /**
  * Inventory es una clase que representa el inventario del jugador.
  *
  * @version 1.0
- * @see FixedArrayList
- * @see FixedArrayList#add(Object)
- * @see FixedArrayList#remove(Object)
- * @see FixedArrayList#isEmpty()
- * @see FixedArrayList#size()
- * @see FixedArrayList#ensureCapacity(int)
- * @see FixedArrayList#clear()
- * @see Item
- * @since 1.0
  */
 public class Inventory {
 
@@ -41,7 +31,8 @@ public class Inventory {
 	 */
 	public void addItem(Item item) {
 
-		System.out.println(items.add(item) ? item.getName() + " has been added to your inventory." : "Inventory is full.");
+		String addMessage = String.format("%s se ha agregado al Inventario!", item.getName());
+		Interactive.printDialog(items.add(item) ? addMessage : "Inventario Lleno.");
 	}
 
 	/**
@@ -71,15 +62,15 @@ public class Inventory {
 
 		if (items.isEmpty()) {
 
-			JOptionPane.showMessageDialog(null, "Inventario Vació.");
+			Interactive.printDialog("Inventario Vació.");
 		} else {
-			String message = "Inventario:\n";
+			StringBuilder message = new StringBuilder("Inventario:\n");
 			String itemMessage;
 			for (Item item : items) {
 				itemMessage = String.format("%s - %s\n", item.getName(), item.getDescription());
-				message += itemMessage;
+				message.append(itemMessage);
 			}
-			JOptionPane.showMessageDialog(null, message);
+			Interactive.printDialog(message.toString());
 		}
 	}
 }
