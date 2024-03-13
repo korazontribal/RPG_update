@@ -2,7 +2,7 @@ package player;
 
 import characters.BasicCharacter;
 import enemies.Enemy;
-import game.exceptions.InvalidOptionException;
+import exceptions.PlayerDeathException;
 import items.armors.Armor;
 import items.weapons.Weapon;
 import org.jetbrains.annotations.NotNull;
@@ -10,9 +10,7 @@ import player.debuffs.Debuff;
 import util.Interactive;
 import util.Randomized;
 
-import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Un jugador es un personaje que puede luchar contra enemigos, ganar experiencia y oro, y equipar armas y armaduras.
@@ -88,14 +86,18 @@ public class Player extends BasicCharacter {
 		this.armor = armor;
 	}
 
-	public void attack(@NotNull Enemy enemy) {
+	public void attack(@NotNull Enemy enemy) throws PlayerDeathException {
 
-		Interactive.printDialog(String.format("%s ataca con %d puntos de daño!", getName(), getDamage()));
-		enemy.takeDamage(getDamage());
-		if (enemy.isDead()) {
+		if (!isDead()) {
+			Interactive.printDialog(String.format("%s ataca con %d puntos de daño!", getName(), getDamage()));
+			enemy.takeDamage(getDamage());
+			if (enemy.isDead()) {
 
-			gainExperience(enemy.getExperience());
-			gainGold(enemy.getGold());
+				gainExperience(enemy.getExperience());
+				gainGold(enemy.getGold());
+			}
+		} else {
+			throw new PlayerDeathException();
 		}
 	}
 
@@ -106,7 +108,7 @@ public class Player extends BasicCharacter {
 						Nombre: %s
 						Nivel: %d
 						Experiencia: %d/%d
-						Salud: %d
+						Salud: %d/%d
 						Mana: %d
 						Fuerza: %d
 						Defensa: %d
@@ -116,7 +118,7 @@ public class Player extends BasicCharacter {
 						Oro: %d
 						Arma: %s
 						Armadura: %s""",
-				getName(), level, experience, level * 20, getMaxHp(), getMaxMp(), strength, defense, intelligence,
+				getName(), level, experience, level * 20, getHp(), getMaxHp(), getMaxMp(), strength, defense, intelligence,
 				dexterity, luck, gold, getWeaponName(), getArmorName());
 		Interactive.printDialog(message);
 	}

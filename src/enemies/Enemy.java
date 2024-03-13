@@ -1,58 +1,66 @@
 package enemies;
 
+import exceptions.EnemyDeadException;
 import player.Player;
 
 public abstract class Enemy {
-    private final String name;
-    private int health;
-    private final int damage;
-    private final int gold;
-    private final int experience;
+	private final String name;
+	private int health;
+	private final int damage;
+	private final int gold;
+	private final int experience;
 
-    public Enemy(String name, int health, int damage, int gold, int experience) {
+	public Enemy(String name, int health, int damage, int gold, int experience) {
 
-        this.name = name;
-        this.health = health;
-        this.damage = damage;
-        this.gold = gold;
-        this.experience = experience;
-    }
+		this.name = name;
+		this.health = health;
+		this.damage = damage;
+		this.gold = gold;
+		this.experience = experience;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
 
-    public int getHealth() {
-        return health;
-    }
+		return name;
+	}
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
+	public int getHealth() {
 
-    public int getDamage() {
-        return damage;
-    }
+		return health;
+	}
 
-    public int getGold() {
-        return gold;
-    }
+	public void setHealth(int health) {
 
-    public int getExperience() {
-        return experience;
-    }
+		this.health = health;
+	}
 
-    public void takeDamage(int damage) {
+	public int getDamage() {
 
-        System.out.println(name + " takes " + damage + " damage!");
-        health -= damage;
-        if (isDead())
-            System.out.println(name + " has been defeated!");
-    }
+		return damage;
+	}
 
-    public boolean isDead() {
-        return health <= 0;
-    }
+	public int getGold() {
 
-    public abstract void attack(Player player);
+		return gold;
+	}
+
+	public int getExperience() {
+
+		return experience;
+	}
+
+	public void takeDamage(int damage) {
+
+		System.out.println(name + " takes " + damage + " damage!");
+		health -= damage;
+		if (isDead())
+			System.out.println(name + " has been defeated!");
+	}
+
+	public boolean isDead() {
+
+		return health <= 0;
+	}
+
+	public abstract void attack(Player player) throws EnemyDeadException;
 }

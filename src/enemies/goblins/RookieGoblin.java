@@ -1,11 +1,12 @@
 package enemies.goblins;
 
 import enemies.Enemy;
+import exceptions.EnemyDeadException;
+import exceptions.ZeroException;
 import org.jetbrains.annotations.NotNull;
 import player.Player;
+import util.Interactive;
 import util.Randomized;
-
-import static util.Randomized.randomizeNumber;
 
 /**
  * La clase RookieGoblin es una subclase de la clase Enemy. Es un enemigo básico que el jugador puede encontrar en el juego.
@@ -17,17 +18,22 @@ import static util.Randomized.randomizeNumber;
 public class RookieGoblin extends Enemy {
 	public RookieGoblin() {
 
-		super("Rookie Goblin", 20, 2, 5, 5);
+		super("Rookie Goblin", 20, 7, 5, 5);
 	}
 
 	@Override
-	public void attack(Player player) {
+	public void attack(Player player) throws EnemyDeadException {
 
-		switch (Randomized.randomizeNumber(0, 2)) {
+		if (!isDead()) {
 
-			case 0 -> plainAttack(player);
-			case 1 -> runAway();
-			case 2 -> stealGold(player);
+			switch (Randomized.randomizeNumber(0, 2)) {
+
+				case 0 -> plainAttack(player);
+				case 1 -> runAway();
+				case 2 -> stealGold(player);
+			}
+		} else {
+			throw new EnemyDeadException();
 		}
 	}
 
@@ -45,7 +51,15 @@ public class RookieGoblin extends Enemy {
 
 	public void stealGold(@NotNull Player player) {
 
-		System.out.println("Rookie Goblin steals 5 gold!");
-		player.setGold(player.getGold() - 5);
+		try {
+			int minus = player.getGold() - 5;
+			if (minus < 0)
+				throw new ZeroException();
+			player.setGold(minus);
+			Interactive.printDialog("Rookie Goblin steals 5 gold!");
+		} catch (ZeroException e) {
+			player.setGold(0);
+			Interactive.printDialog("Player wallet is Empty!");
+		}
 	}
 }

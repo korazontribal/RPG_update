@@ -73,30 +73,44 @@ public class Game {
 				}
 				default -> throw new InvalidOptionException();
 			}
+			if (option < 4) {
+				printPlayerMenu();
+			}
 		} catch (Exception e) {
 			Interactive.printDialog("La opción ingresada no es válida");
+			printPlayerMenu();
 		}
 	}
 
 	private void battleMenu(Enemy enemy) {
 
-		try {
-			String battleMenu = "1. Atacar\n2. Huir";
-			int battleOption = Integer.parseInt(JOptionPane.showInputDialog(battleMenu));
-			switch (battleOption) {
-				case 1 -> player.attack(enemy);
-				case 2 -> {
-					if (Randomized.randomizeBoolean()) {
-						player.printRun();
-						enemy.setHealth(0);
-					} else Interactive.printDialog("No has podido huir!");
+		String menu = "1. Atacar\n2. Huir";
+		if (!enemy.isDead()) {
+			try {
+				int battleOption = Integer.parseInt(JOptionPane.showInputDialog(menu));
+				switch (battleOption) {
+					case 1 -> {
+						player.attack(enemy);
+						if (!enemy.isDead()) {
+							enemy.attack(player);
+						}
+						battleMenu(enemy);
+					}
+					case 2 -> {
+						if (Randomized.randomizeBoolean()) {
+							player.printRun();
+							enemy.setHealth(0);
+						} else {
+							Interactive.printDialog("No has podido huir!");
+							battleMenu(enemy);
+						}
+					}
+					default -> throw new InvalidOptionException();
 				}
-				default -> throw new InvalidOptionException();
+			} catch (Exception e) {
+				Interactive.printDialog("La opción ingresada no es válida");
+				battleMenu(enemy);
 			}
-			if (!enemy.isDead()) enemy.attack(player);
-		} catch (Exception e) {
-			Interactive.printDialog("La opción ingresada no es válida");
-			battleMenu(enemy);
 		}
 	}
 
