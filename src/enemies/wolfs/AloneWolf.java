@@ -1,6 +1,7 @@
 package enemies.wolfs;
 
 import enemies.Enemy;
+import game.exceptions.EnemyDeadException;
 import items.armors.helmets.WoodHelmet;
 import items.misc.WolfFur;
 import player.Player;
@@ -21,7 +22,7 @@ public class AloneWolf extends Enemy {
 	 */
 	public AloneWolf() {
 
-		super("Lobo solitario", 30, 3, 10, 10);
+		super("Lobo solitario", 30, 5, 10, 10);
 	}
 
 	/**
@@ -30,7 +31,7 @@ public class AloneWolf extends Enemy {
 	 * @param player Jugador al que se le ataca.
 	 */
 	@Override
-	public void attack(Player player) {
+	public void attack(Player player) throws EnemyDeadException {
 
 		if (!isDead()) {
 
@@ -45,6 +46,8 @@ public class AloneWolf extends Enemy {
 			if (ratio <= simpleAttackProbability) simpleAttack(player);
 			else if (ratio <= simpleAttackProbability + biteProbability) bite(player);
 			else howl(player);
+		} else {
+			throw new EnemyDeadException();
 		}
 	}
 
@@ -89,7 +92,7 @@ public class AloneWolf extends Enemy {
 	 */
 	public void bite(Player player) {
 
-		int totalDamage = getDamage() + 5;
+		int totalDamage = getDamage() + 3;
 		Interactive.printDialog(String.format("¡%s muerde con %d puntos de daño!", getName(), totalDamage));
 		player.takeDamage(totalDamage);
 	}

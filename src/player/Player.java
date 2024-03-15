@@ -85,6 +85,12 @@ public class Player extends BasicCharacter implements Serializable {
 		this.armor = armor;
 	}
 
+	public void revive() {
+
+		hp = maxHp;
+		mp = maxMp;
+	}
+
 	public void attack(@NotNull Enemy enemy) throws PlayerDeathException {
 
 		if (!isDead()) {

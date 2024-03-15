@@ -31,4 +31,9 @@ public abstract class Item implements Serializable {
 
 		return description;
 	}
+
+	public int getPrice() {
+
+		return price;
+	}
 }

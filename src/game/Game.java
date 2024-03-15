@@ -3,7 +3,9 @@ package game;
 import enemies.Enemy;
 import enemies.goblins.RookieGoblin;
 import enemies.wolfs.AloneWolf;
+import game.exceptions.EnemyDeadException;
 import game.exceptions.InvalidOptionException;
+import game.exceptions.PlayerDeathException;
 import org.jetbrains.annotations.NotNull;
 import player.Player;
 import util.FileManager;
@@ -52,6 +54,7 @@ public class Game {
 		try {
 			int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 			switch (option) {
+
 				case 1 -> {
 					try {
 						player = FileManager.loadGame();
@@ -86,6 +89,7 @@ public class Game {
 				6. Salir""";
 		Enemy currentEnemy;
 		try {
+
 			int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 			switch (option) {
 				case 1 -> player.displayData();
@@ -142,6 +146,7 @@ public class Game {
 		String menu = "1. Atacar\n2. Huir";
 		if (!enemy.isDead()) {
 			try {
+
 				int battleOption = Integer.parseInt(JOptionPane.showInputDialog(menu));
 				switch (battleOption) {
 					case 1 -> {
@@ -162,9 +167,17 @@ public class Game {
 					}
 					default -> throw new InvalidOptionException();
 				}
-			} catch (Exception e) {
+			} catch (InvalidOptionException e) {
 				Interactive.printDialog("La opción ingresada no es válida");
 				battleMenu(enemy);
+			} catch (PlayerDeathException e) {
+				Interactive.printDialog("Has muerto!");
+				Interactive.printDialog("Quizás deberías entrenar más antes de intentar pelear con los enemigos.");
+				player.revive();
+				enemies.clear();
+			} catch (EnemyDeadException e) {
+				Interactive.printDialog("El enemigo ha muerto!");
+				enemy.setHealth(0);
 			}
 		}
 	}

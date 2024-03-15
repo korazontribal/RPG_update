@@ -37,10 +37,11 @@ public class Inventory implements Serializable {
 	 */
 	public void equipArmorMenu(Player player) {
 
-		StringBuilder message = new StringBuilder("Equipar Arma:\n");
+		StringBuilder message = new StringBuilder("Equipar Armadura:\n");
 		String itemMessage;
 		List<Armor> armors = items.filterArmors();
 		for (int i = 0; i < armors.size(); i++) {
+
 			itemMessage = String.format("%d. %s - %s\n", i + 1, armors.get(i).getName(), armors.get(i).getDescription());
 			message.append(itemMessage);
 		}
@@ -48,6 +49,7 @@ public class Inventory implements Serializable {
 		try {
 			int option = Integer.parseInt(JOptionPane.showInputDialog(message.toString()));
 			if (option > 0 && option <= armors.size()) {
+
 				if (player.getArmor() != null)
 					items.add(player.getArmor());
 				player.equipArmor(armors.get(option - 1));
@@ -71,6 +73,7 @@ public class Inventory implements Serializable {
 		String itemMessage;
 		List<Weapon> weapons = items.filterWeapons();
 		for (int i = 0; i < weapons.size(); i++) {
+
 			itemMessage = String.format("%d. %s - %s\n", i + 1, weapons.get(i).getName(), weapons.get(i).getDescription());
 			message.append(itemMessage);
 		}
@@ -78,6 +81,7 @@ public class Inventory implements Serializable {
 		try {
 			int option = Integer.parseInt(JOptionPane.showInputDialog(message.toString()));
 			if (option > 0 && option <= weapons.size()) {
+
 				if (player.getWeapon() != null)
 					items.add(player.getWeapon());
 				player.equipWeapon(weapons.get(option - 1));

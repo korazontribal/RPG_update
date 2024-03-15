@@ -24,7 +24,7 @@ public class RookieGoblin extends Enemy {
 	 */
 	public RookieGoblin() {
 
-		super("Rookie Goblin", 20, 7, 5, 5);
+		super("Duende novato", 10, 7, 5, 5);
 	}
 
 	/**

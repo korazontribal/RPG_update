@@ -23,16 +23,13 @@ public class FileManager {
 		try {
 			oos = new ObjectOutputStream(new FileOutputStream("files/game.dat"));
 			oos.writeObject(player);
+			try {
+				oos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 }

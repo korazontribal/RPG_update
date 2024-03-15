@@ -14,6 +14,6 @@ public class WoodBlade extends Weapon implements Serializable {
 	@Override
 	public String toString() {
 
-		return "Wood Blade";
+		return "Espada de madera";
 	}
 }
