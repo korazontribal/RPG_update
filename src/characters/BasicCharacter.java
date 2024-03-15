@@ -1,6 +1,8 @@
 package characters;
 
-public abstract class BasicCharacter {
+import java.io.Serializable;
+
+public abstract class BasicCharacter implements Serializable {
 
     protected String name;
     protected int hp;

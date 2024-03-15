@@ -2,7 +2,7 @@ package player;
 
 import characters.BasicCharacter;
 import enemies.Enemy;
-import exceptions.PlayerDeathException;
+import game.exceptions.PlayerDeathException;
 import items.armors.Armor;
 import items.weapons.Weapon;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +10,7 @@ import player.debuffs.Debuff;
 import util.Interactive;
 import util.Randomized;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * @version 1.0
  * @autor jesus
  */
-public class Player extends BasicCharacter {
+public class Player extends BasicCharacter implements Serializable {
 	/**
 	 * La fuerza del jugador.
 	 */
@@ -36,7 +37,6 @@ public class Player extends BasicCharacter {
 	private int experience;
 	private int level;
 	private int gold;
-	private ArrayList<Debuff> debuffs;
 	private Weapon weapon;
 	private Armor armor;
 	private final Inventory inventory;
@@ -44,7 +44,6 @@ public class Player extends BasicCharacter {
 	public Player(String name) {
 
 		super(name, 30, 10);
-		debuffs = new ArrayList<>(5);
 		experience = 0;
 		level = 1;
 		gold = 0;
@@ -60,11 +59,11 @@ public class Player extends BasicCharacter {
 		while (maxPoints > 0) {
 			switch (stat) {
 				case 1 -> {
-					if (strength < (level * 5)) strength++;
+					if (strength < (level * 3)) strength++;
 					else maxPoints++;
 				}
 				case 2 -> {
-					if (defense < (level * 5)) defense++;
+					if (defense < (level * 3)) defense++;
 					else maxPoints++;
 				}
 				case 3 -> intelligence++;
@@ -95,6 +94,7 @@ public class Player extends BasicCharacter {
 
 				gainExperience(enemy.getExperience());
 				gainGold(enemy.getGold());
+				enemy.dropItem(this);
 			}
 		} else {
 			throw new PlayerDeathException();
@@ -107,20 +107,35 @@ public class Player extends BasicCharacter {
 		String message = String.format("""
 						Nombre: %s
 						Nivel: %d
-						Experiencia: %d/%d
-						Salud: %d/%d
-						Mana: %d
-						Fuerza: %d
-						Defensa: %d
+						Experiencia: %s
+						Salud: %s
+						Mana: %s
+						Fuerza: %s
+						Defensa: %s
 						Inteligencia: %d
 						Destreza: %d
 						Suerte: %d
 						Oro: %d
 						Arma: %s
 						Armadura: %s""",
-				getName(), level, experience, level * 20, getHp(), getMaxHp(), getMaxMp(), strength, defense, intelligence,
-				dexterity, luck, gold, getWeaponName(), getArmorName());
+				getName(), level, getActualExperience(), getActualHp(), getActualMp(), getTotalAttack(),
+				getTotalDefense(), intelligence, dexterity, luck, gold, getWeaponName(), getArmorName());
 		Interactive.printDialog(message);
+	}
+
+	private String getActualHp() {
+
+		return String.format("%d/%d", getHp(), getMaxHp());
+	}
+
+	private String getActualMp() {
+
+		return String.format("%d/%d", getMp(), getMaxMp());
+	}
+
+	private String getActualExperience() {
+
+		return String.format("%d/%d", experience, level * 20);
 	}
 
 	public void takeDamage(int damage) {
@@ -131,12 +146,6 @@ public class Player extends BasicCharacter {
 			damage -= armor.getDef();
 			if (damage < 0) damage = 0;
 		}
-		for (Debuff debuff : debuffs) {
-
-			damage += debuff.getDamage();
-			debuff.reduceDuration();
-			if (debuff.getDuration() == 0) debuffs.remove(debuff);
-		}
 		super.takeDamage(damage);
 		if (isDead()) printDeath();
 	}
@@ -144,20 +153,15 @@ public class Player extends BasicCharacter {
 	public void gainExperience(int experience) {
 
 		this.experience += experience;
-		Interactive.printDialog(String.format("Has ganado %d puntos de experiencia!", experience));
+		printExperience(experience);
 		if (this.experience >= level * 20) {
 
 			level++;
-			strength++;
-			defense++;
-			intelligence++;
-			dexterity++;
-			luck++;
 			maxHp += 5;
 			maxMp += 3;
 			hp = maxHp;
 			mp = maxMp;
-			randomizeStats(3);
+			randomizeStats(5);
 			printLevelUp();
 		}
 	}
@@ -165,6 +169,7 @@ public class Player extends BasicCharacter {
 	public void gainGold(int gold) {
 
 		this.gold += gold;
+		printGold(gold);
 	}
 
 	public void printLevelUp() {
@@ -219,16 +224,6 @@ public class Player extends BasicCharacter {
 	}
 
 	//Getters and Setters
-
-	public ArrayList<Debuff> getDebuffs() {
-
-		return debuffs;
-	}
-
-	public void setDebuffs(ArrayList<Debuff> debuffs) {
-
-		this.debuffs = debuffs;
-	}
 
 	public int getLevel() {
 
@@ -303,6 +298,16 @@ public class Player extends BasicCharacter {
 	public int getDamage() {
 
 		return weapon != null ? strength + weapon.getAtk() : strength;
+	}
+
+	private String getTotalAttack() {
+
+		return weapon != null ? String.format("%d (+ %d)", strength, weapon.getAtk()) : String.valueOf(strength);
+	}
+
+	private String getTotalDefense() {
+
+		return armor != null ? String.format("%d (+ %d)", defense, armor.getDef()) : String.valueOf(defense);
 	}
 
 	public String getName() {

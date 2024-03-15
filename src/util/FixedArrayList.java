@@ -1,6 +1,11 @@
 package util;
 
+import items.armors.Armor;
+import items.weapons.Weapon;
+
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Una FixedArrayList es una lista que tiene una capacidad fija y puede cambiar de tamaño de acuerdo a su función
@@ -11,7 +16,7 @@ import java.util.ArrayList;
  * @author jesus
  * @version 1.0
  */
-public class FixedArrayList<T> extends ArrayList<T> {
+public class FixedArrayList<T> extends ArrayList<T> implements Serializable {
 	private int capacity;
 
 	/**
@@ -47,5 +52,37 @@ public class FixedArrayList<T> extends ArrayList<T> {
 
 		capacity += amount;
 		ensureCapacity(capacity);
+	}
+
+	/**
+	 * Filtra los elementos de la lista que son armaduras.
+	 *
+	 * @return una lista de armaduras
+	 */
+	public List<Armor> filterArmors() {
+
+		List<Armor> armors = new ArrayList<>();
+		for (T item : this) {
+			if (item instanceof Armor) {
+				armors.add((Armor) item);
+			}
+		}
+		return armors;
+	}
+
+	/**
+	 * Filtra los elementos de la lista que son armas.
+	 *
+	 * @return una lista de armas
+	 */
+	public List<Weapon> filterWeapons() {
+
+		List<Weapon> weapons = new ArrayList<>();
+		for (T item : this) {
+			if (item instanceof Weapon) {
+				weapons.add((Weapon) item);
+			}
+		}
+		return weapons;
 	}
 }

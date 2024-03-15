@@ -1,8 +1,10 @@
 package items;
 
-import javax.swing.*;
+import util.Interactive;
 
-public abstract class Item {
+import java.io.Serializable;
+
+public abstract class Item implements Serializable {
 
 	protected final String name;
 	protected final String description;
@@ -17,8 +19,7 @@ public abstract class Item {
 
 	public void displayData() {
 
-		JOptionPane.showMessageDialog(null,
-				String.format("%s", description));
+		Interactive.printDialog(String.format("Nombre: %s\nDescripción: %s\nPrecio: %d", name, description, price));
 	}
 
 	public String getName() {

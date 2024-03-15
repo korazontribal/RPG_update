@@ -1,7 +1,8 @@
 package enemies;
 
-import exceptions.EnemyDeadException;
+import game.exceptions.EnemyDeadException;
 import player.Player;
+import util.Interactive;
 
 public abstract class Enemy {
 	private final String name;
@@ -51,10 +52,10 @@ public abstract class Enemy {
 
 	public void takeDamage(int damage) {
 
-		System.out.println(name + " takes " + damage + " damage!");
+		Interactive.printDialog(String.format("¡%s sufre %d daños!", name, damage));
 		health -= damage;
 		if (isDead())
-			System.out.println(name + " has been defeated!");
+			Interactive.printDialog(String.format("¡%s ha sido derrotado!", name));
 	}
 
 	public boolean isDead() {
@@ -63,4 +64,6 @@ public abstract class Enemy {
 	}
 
 	public abstract void attack(Player player) throws EnemyDeadException;
+
+	public abstract void dropItem(Player player);
 }

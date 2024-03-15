@@ -1,10 +1,12 @@
 package items.armors.helmets;
 
 import items.armors.Armor;
+import util.Interactive;
 
 import javax.swing.*;
+import java.io.Serializable;
 
-public class WoodHelmet extends Armor {
+public class WoodHelmet extends Armor implements Serializable {
 
 	public WoodHelmet() {
 
@@ -16,6 +18,6 @@ public class WoodHelmet extends Armor {
 	@Override
 	public void effect() {
 
-		JOptionPane.showMessageDialog(null, "Sin Efectos");
+		Interactive.printDialog("Sin Efectos");
 	}
 }

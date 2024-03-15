@@ -1,48 +1,96 @@
 package enemies.wolfs;
 
 import enemies.Enemy;
+import items.armors.helmets.WoodHelmet;
+import items.misc.WolfFur;
 import player.Player;
-import player.debuffs.Debuff;
-import player.debuffs.DebuffType;
+import util.Interactive;
 import util.Randomized;
 
-import static util.Randomized.randomizeNumber;
-
+/**
+ * La clase AloneWolf es una subclase de la clase Enemy. Es un enemigo básico que el jugador puede encontrar en el juego.
+ * Tiene un método de ataque único que le permite realizar una de tres acciones: simpleAttack, howl, or bite.
+ * El método simpleAttack permite que AloneWolf ataque al jugador con una cantidad determinada de daño.
+ * El método howl permite que AloneWolf aúlle.
+ * El método bite permite que AloneWolf muerda al jugador provocando una cantidad determinada de daño.
+ */
 public class AloneWolf extends Enemy {
 
-    public AloneWolf() {
+	/**
+	 * Constructor de la clase Lobo solitario.
+	 */
+	public AloneWolf() {
 
-        super("Lobo solitario", 30, 3, 10, 10);
-    }
+		super("Lobo solitario", 30, 3, 10, 10);
+	}
 
-    @Override
-    public void attack(Player player) {
+	/**
+	 * Función que permite al lobo solitario atacar al jugador.
+	 *
+	 * @param player Jugador al que se le ataca.
+	 */
+	@Override
+	public void attack(Player player) {
 
-        switch (Randomized.randomizeNumber(0, 2)) {
+		if (!isDead()) {
 
-            case 0 -> simpleAttack(player);
-            case 1 -> howl(player);
-            case 2 -> bite(player);
-        }
-    }
+			double simpleAttackProbability = 0.5;
+			double howlProbability = 0.3;
+			double biteProbability = 0.2;
+			double totalProbability = simpleAttackProbability + howlProbability + biteProbability;
+			double ratio = Randomized.randomizeDouble(totalProbability);
+			// simpleAttackProbability = 50%, howlProbability = 30%, biteProbability = 20%
+			// simpleAttackProbability + howlProbability + biteProbability = 100%
+			// ratio = 0.0 - 0.5 -> simpleAttack, ratio = 0.51 - 0.7 -> bite, ratio = 0.71 - 1.0 -> howl
+			if (ratio <= simpleAttackProbability) simpleAttack(player);
+			else if (ratio <= simpleAttackProbability + biteProbability) bite(player);
+			else howl(player);
+		}
+	}
 
-    public void simpleAttack(Player player) {
+	/**
+	 * Función que permite al lobo solitario soltar un objeto al morir.
+	 *
+	 * @param player Jugador al que se le suelta el objeto.
+	 */
+	@Override
+	public void dropItem(Player player) {
 
-        System.out.println("Lobo solitario ataca con" + getDamage() + " puntos de daño!");
-        player.takeDamage(getDamage());
-    }
+		int ratio = Randomized.randomizeNumber(1, 100);
+		player.getInventory().addItem(ratio > 65 ? new WoodHelmet() : new WolfFur());
+	}
 
-    public void howl(Player player) {
+	/**
+	 * Función que permite al lobo solitario atacar.
+	 *
+	 * @param player Jugador al que se le ataca.
+	 */
+	public void simpleAttack(Player player) {
 
-        System.out.println("¡Lobo solitario aúlla!");
-        if (player.getDebuffs().size() < 5) {
-            player.getDebuffs().add(new Debuff(DebuffType.WEAKNESS));
-        }
-    }
+		Interactive.printDialog(String.format("¡%s ataca con %d puntos de daño!", getName(), getDamage()));
+		player.takeDamage(getDamage());
+	}
 
-    public void bite(Player player) {
+	/**
+	 * Función que permite al lobo solitario aullar.
+	 *
+	 * @param player Jugador al que se le aúlla.
+	 */
+	public void howl(Player player) {
 
-        System.out.println("¡Lobo solitario muerde!");
-        player.takeDamage(getDamage() + 5);
-    }
+		Interactive.printDialog("¡Lobo solitario aúlla!");
+		//TODO: Implementar efecto de aullido.
+	}
+
+	/**
+	 * Función que permite al lobo lanzar una mordida poderosa.
+	 *
+	 * @param player Jugador al que se le muerde.
+	 */
+	public void bite(Player player) {
+
+		int totalDamage = getDamage() + 5;
+		Interactive.printDialog(String.format("¡%s muerde con %d puntos de daño!", getName(), totalDamage));
+		player.takeDamage(totalDamage);
+	}
 }

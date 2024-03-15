@@ -46,4 +46,16 @@ public interface Randomized {
 
 		return new Random().nextDouble() * (max - min) + min;
 	}
+
+	/**
+	 * Genera un número decimal aleatorio entre 0 y el valor especificado.
+	 *
+	 * @param total el valor máximo del número generado
+	 *
+	 * @return un número decimal aleatorio entre 0 y el valor especificado
+	 */
+	static double randomizeDouble(double total) {
+
+		return new Random().nextDouble() * total;
+	}
 }

@@ -2,8 +2,8 @@ package util;
 
 import enemies.Enemy;
 import enemies.goblins.RookieGoblin;
-import exceptions.EnemyDeadException;
-import exceptions.PlayerDeathException;
+import game.exceptions.EnemyDeadException;
+import game.exceptions.PlayerDeathException;
 import player.Player;
 
 import javax.swing.*;

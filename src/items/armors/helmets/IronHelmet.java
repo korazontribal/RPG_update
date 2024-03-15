@@ -1,10 +1,12 @@
 package items.armors.helmets;
 
 import items.armors.Armor;
+import util.Interactive;
 
 import javax.swing.*;
+import java.io.Serializable;
 
-public class IronHelmet extends Armor {
+public class IronHelmet extends Armor implements Serializable {
 	private int str;
 	private int counter;
 
@@ -26,8 +28,7 @@ public class IronHelmet extends Armor {
 	@Override
 	public void effect() {
 
-		JOptionPane.showMessageDialog(null,
-				"Este casco permité aumentar la defensa del usuario por tres turnos.");
+		Interactive.printDialog("Este casco permité aumentar la defensa del usuario por tres turnos.");
 	}
 
 	public int getStr() {
