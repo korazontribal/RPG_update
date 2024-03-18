@@ -37,29 +37,55 @@ public class Inventory implements Serializable {
 	 */
 	public void equipArmorMenu(Player player) {
 
-		StringBuilder message = new StringBuilder("Equipar Armadura:\n");
-		String itemMessage;
 		List<Armor> armors = items.filterArmors();
-		for (int i = 0; i < armors.size(); i++) {
-
-			itemMessage = String.format("%d. %s - %s\n", i + 1, armors.get(i).getName(), armors.get(i).getDescription());
-			message.append(itemMessage);
-		}
-		message.append("0. Salir\n");
+		String message = getArmorMessage(armors);
 		try {
-			int option = Integer.parseInt(JOptionPane.showInputDialog(message.toString()));
-			if (option > 0 && option <= armors.size()) {
 
-				if (player.getArmor() != null)
-					items.add(player.getArmor());
-				player.equipArmor(armors.get(option - 1));
-				player.printEquipArmor(armors.get(option - 1));
-				items.remove(armors.get(option - 1));
-			}
+			int option = Integer.parseInt(JOptionPane.showInputDialog(message));
+			if (option > 0 && option <= armors.size()) equipArmorAction(player, armors, option);
 		} catch (Exception e) {
 			Interactive.printDialog("Opción inválida.");
 			equipArmorMenu(player);
 		}
+	}
+
+	/**
+	 * Obtiene el mensaje para equipar una armadura.
+	 *
+	 * @param armors la lista de armaduras
+	 *
+	 * @return el mensaje para equipar una armadura
+	 */
+	private String getArmorMessage(List<Armor> armors) {
+
+		StringBuilder message = new StringBuilder("Equipar Armadura:\n");
+		String itemMessage;
+		Armor actualArmor;
+		for (int i = 0; i < armors.size(); i++) {
+
+			actualArmor = armors.get(i);
+			itemMessage = String.format("%d. %s - %s\n", i + 1, actualArmor.getName(), actualArmor.getDescription());
+			message.append(itemMessage);
+		}
+		message.append("0. Salir\n");
+		return message.toString();
+	}
+
+	/**
+	 * Realiza la acción de equipar una armadura.
+	 *
+	 * @param player el jugador que equipará la armadura
+	 * @param armors la lista de armaduras
+	 * @param option la opción seleccionada
+	 */
+	private void equipArmorAction(Player player, List<Armor> armors, int option) {
+
+		Armor selectedArmor = armors.get(option - 1);
+		if (player.getArmor() != null)
+			items.add(player.getArmor());
+		player.equipArmor(selectedArmor);
+		player.printEquipArmor(selectedArmor);
+		items.remove(selectedArmor);
 	}
 
 	/**
@@ -69,29 +95,57 @@ public class Inventory implements Serializable {
 	 */
 	public void equipWeaponMenu(Player player) {
 
-		StringBuilder message = new StringBuilder("Equipar Arma:\n");
-		String itemMessage;
 		List<Weapon> weapons = items.filterWeapons();
-		for (int i = 0; i < weapons.size(); i++) {
-
-			itemMessage = String.format("%d. %s - %s\n", i + 1, weapons.get(i).getName(), weapons.get(i).getDescription());
-			message.append(itemMessage);
-		}
-		message.append("0. Salir\n");
+		String message = getWeaponMessage(weapons);
 		try {
-			int option = Integer.parseInt(JOptionPane.showInputDialog(message.toString()));
+			int option = Integer.parseInt(JOptionPane.showInputDialog(message));
 			if (option > 0 && option <= weapons.size()) {
 
-				if (player.getWeapon() != null)
-					items.add(player.getWeapon());
-				player.equipWeapon(weapons.get(option - 1));
-				player.printEquipWeapon(weapons.get(option - 1));
-				items.remove(weapons.get(option - 1));
+				equipWeaponAction(player, weapons, option);
 			}
 		} catch (Exception e) {
 			Interactive.printDialog("Opción inválida.");
 			equipWeaponMenu(player);
 		}
+	}
+
+	/**
+	 * Realiza la acción de equipar un arma.
+	 *
+	 * @param player el jugador que equipará el arma
+	 * @param weapons la lista de armas
+	 * @param option la opción seleccionada
+	 */
+	private void equipWeaponAction(Player player, List<Weapon> weapons, int option) {
+
+		Weapon selectedWeapon = weapons.get(option - 1);
+		if (player.getWeapon() != null)
+			items.add(player.getWeapon());
+		player.equipWeapon(selectedWeapon);
+		player.printEquipWeapon(selectedWeapon);
+		items.remove(selectedWeapon);
+	}
+
+	/**
+	 * Obtiene el mensaje para equipar un arma.
+	 *
+	 * @param weapons la lista de armas
+	 *
+	 * @return el mensaje para equipar un arma
+	 */
+	private String getWeaponMessage(List<Weapon> weapons) {
+
+		StringBuilder message = new StringBuilder("Equipar Arma:\n");
+		String itemMessage;
+		Weapon actualWeapon;
+		for (int i = 0; i < weapons.size(); i++) {
+
+			actualWeapon = weapons.get(i);
+			itemMessage = String.format("%d. %s - %s\n", i + 1, actualWeapon.getName(), actualWeapon.getDescription());
+			message.append(itemMessage);
+		}
+		message.append("0. Salir\n");
+		return message.toString();
 	}
 
 	/**

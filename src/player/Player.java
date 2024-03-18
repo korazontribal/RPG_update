@@ -41,6 +41,11 @@ public class Player extends BasicCharacter implements Serializable {
 	private Armor armor;
 	private final Inventory inventory;
 
+	/**
+	 * Construye un nuevo jugador con un nombre.
+	 *
+	 * @param name el nombre del jugador
+	 */
 	public Player(String name) {
 
 		super(name, 30, 10);
@@ -53,6 +58,11 @@ public class Player extends BasicCharacter implements Serializable {
 		inventory = new Inventory();
 	}
 
+	/**
+	 * Reparte aleatoriamente los puntos de fuerza, defensa, inteligencia, destreza y suerte.
+	 *
+	 * @param maxPoints los puntos a repartir
+	 */
 	public void randomizeStats(int maxPoints) {
 
 		int stat = Randomized.randomizeNumber(1, 5);
@@ -75,36 +85,64 @@ public class Player extends BasicCharacter implements Serializable {
 		}
 	}
 
+	/**
+	 * El jugador equipa un arma.
+	 *
+	 * @param weapon el arma a equipar
+	 */
 	public void equipWeapon(Weapon weapon) {
 
 		this.weapon = weapon;
 	}
 
+	/**
+	 * El jugador equipa una armadura.
+	 *
+	 * @param armor la armadura a equipar
+	 */
 	public void equipArmor(Armor armor) {
 
 		this.armor = armor;
 	}
 
+	/**
+	 * El jugador revive con toda su salud y mana.
+	 */
 	public void revive() {
 
 		hp = maxHp;
 		mp = maxMp;
 	}
 
+	/**
+	 * El jugador ataca a un enemigo.
+	 *
+	 * @param enemy el enemigo a atacar
+	 *
+	 * @throws PlayerDeathException si el jugador está muerto
+	 */
 	public void attack(@NotNull Enemy enemy) throws PlayerDeathException {
 
 		if (!isDead()) {
+
 			Interactive.printDialog(String.format("%s ataca con %d puntos de daño!", getName(), getDamage()));
 			enemy.takeDamage(getDamage());
-			if (enemy.isDead()) {
-
-				gainExperience(enemy.getExperience());
-				gainGold(enemy.getGold());
-				enemy.dropItem(this);
-			}
+			if (enemy.isDead()) getRewards(enemy);
 		} else {
 			throw new PlayerDeathException();
 		}
+	}
+
+	/**
+	 * El Jugador obtiene las recompensas por derrotar a un enemigo.
+	 *
+	 * @param enemy el enemigo derrotado
+	 */
+	private void getRewards(@NotNull Enemy enemy) {
+
+		gainExperience(enemy.getExperience());
+		gainGold(enemy.getGold());
+		enemy.dropItem(this);
 	}
 
 	@Override
@@ -144,6 +182,16 @@ public class Player extends BasicCharacter implements Serializable {
 		return String.format("%d/%d", experience, level * 20);
 	}
 
+	private String getTotalAttack() {
+
+		return weapon != null ? String.format("%d (+ %d)", strength, weapon.getAtk()) : String.valueOf(strength);
+	}
+
+	private String getTotalDefense() {
+
+		return armor != null ? String.format("%d (+ %d)", defense, armor.getDef()) : String.valueOf(defense);
+	}
+
 	public void takeDamage(int damage) {
 
 		damage -= defense;
@@ -160,6 +208,14 @@ public class Player extends BasicCharacter implements Serializable {
 
 		this.experience += experience;
 		printExperience(experience);
+		checkLevelUp();
+	}
+
+	/**
+	 * Revisa si el jugador sube de nivel.
+	 */
+	private void checkLevelUp() {
+
 		if (this.experience >= level * 20) {
 
 			level++;
@@ -304,16 +360,6 @@ public class Player extends BasicCharacter implements Serializable {
 	public int getDamage() {
 
 		return weapon != null ? strength + weapon.getAtk() : strength;
-	}
-
-	private String getTotalAttack() {
-
-		return weapon != null ? String.format("%d (+ %d)", strength, weapon.getAtk()) : String.valueOf(strength);
-	}
-
-	private String getTotalDefense() {
-
-		return armor != null ? String.format("%d (+ %d)", defense, armor.getDef()) : String.valueOf(defense);
 	}
 
 	public String getName() {

@@ -87,37 +87,51 @@ public class Game {
 				4. Equipar arma
 				5. Equipar armadura
 				6. Salir""";
-		Enemy currentEnemy;
 		try {
 
 			int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 			switch (option) {
+
 				case 1 -> player.displayData();
 				case 2 -> player.getInventory().printItems();
-				case 3 -> {
-					currentEnemy = getEnemy(enemies);
-					while (!currentEnemy.isDead() && !player.isDead()) {
-
-						battleMenu(currentEnemy);
-					}
-					enemies.remove(currentEnemy);
-				}
+				case 3 -> attackCycle();
 				case 4 -> equipWeaponMenu();
 				case 5 -> equipArmorMenu();
-				case 6 -> {
-					Interactive.printDialog("Gracias por jugar");
-					FileManager.saveGame(player);
-					enemies.clear();
-				}
+				case 6 -> endGame();
 				default -> throw new InvalidOptionException();
 			}
 			if (option < 6) {
+
 				printPlayerMenu();
 			}
 		} catch (Exception e) {
 			Interactive.printDialog("La opción ingresada no es válida");
 			printPlayerMenu();
 		}
+	}
+
+	/**
+	 * Muestra el menú de fin de juego.
+	 */
+	private void endGame() {
+
+		Interactive.printDialog("Gracias por jugar");
+		FileManager.saveGame(player);
+		enemies.clear();
+	}
+
+	/**
+	 * Realiza el ciclo de ataque.
+	 */
+	private void attackCycle() {
+
+		Enemy currentEnemy;
+		currentEnemy = getEnemy(enemies);
+		while (!currentEnemy.isDead() && !player.isDead()) {
+
+			battleMenu(currentEnemy);
+		}
+		enemies.remove(currentEnemy);
 	}
 
 	/**
@@ -149,36 +163,68 @@ public class Game {
 
 				int battleOption = Integer.parseInt(JOptionPane.showInputDialog(menu));
 				switch (battleOption) {
-					case 1 -> {
-						player.attack(enemy);
-						if (!enemy.isDead()) {
-							enemy.attack(player);
-						}
-						battleMenu(enemy);
-					}
-					case 2 -> {
-						if (Randomized.randomizeBoolean()) {
-							player.printRun();
-							enemy.setHealth(0);
-						} else {
-							Interactive.printDialog("No has podido huir!");
-							battleMenu(enemy);
-						}
-					}
+
+					case 1 -> battleOrder(enemy);
+					case 2 -> fleeTry(enemy);
 					default -> throw new InvalidOptionException();
 				}
 			} catch (InvalidOptionException e) {
+
 				Interactive.printDialog("La opción ingresada no es válida");
 				battleMenu(enemy);
 			} catch (PlayerDeathException e) {
-				Interactive.printDialog("Has muerto!");
-				Interactive.printDialog("Quizás deberías entrenar más antes de intentar pelear con los enemigos.");
-				player.revive();
-				enemies.clear();
+
+				gameOver();
 			} catch (EnemyDeadException e) {
+
 				Interactive.printDialog("El enemigo ha muerto!");
 				enemy.setHealth(0);
 			}
+		}
+	}
+
+
+	/**
+	 * Muestra el mensaje de fin de juego al perder contra un enemigo.
+	 */
+	private void gameOver() {
+
+		Interactive.printDialog("Has muerto!");
+		Interactive.printDialog("Quizás deberías entrenar más antes de intentar pelear con los enemigos.");
+		player.revive();
+		enemies.clear();
+	}
+
+	/**
+	 * Realiza el orden de ataque.
+	 *
+	 * @param enemy el enemigo con el que se está peleando
+	 *
+	 * @throws PlayerDeathException si el jugador muere
+	 * @throws EnemyDeadException   si el enemigo muere
+	 */
+	private void battleOrder(Enemy enemy) throws PlayerDeathException, EnemyDeadException {
+
+		player.attack(enemy);
+		if (!enemy.isDead()) {
+			enemy.attack(player);
+		}
+		battleMenu(enemy);
+	}
+
+	/**
+	 * Intenta huir de la batalla.
+	 *
+	 * @param enemy el enemigo con el que se está peleando
+	 */
+	private void fleeTry(Enemy enemy) {
+
+		if (Randomized.randomizeBoolean()) {
+			player.printRun();
+			enemy.setHealth(0);
+		} else {
+			Interactive.printDialog("No has podido huir!");
+			battleMenu(enemy);
 		}
 	}
 

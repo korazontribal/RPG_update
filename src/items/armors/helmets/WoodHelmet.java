@@ -11,8 +11,7 @@ public class WoodHelmet extends Armor implements Serializable {
 	public WoodHelmet() {
 
 		super("Casco de Madera",
-				"Un casco de madera que no protege mucho, pero es mejor que nada.", 5, 1);
-		this.def = 1;
+				"Un casco de madera que no protege mucho, pero es mejor que nada.", 5, 2);
 	}
 
 	@Override
