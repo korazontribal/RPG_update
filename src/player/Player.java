@@ -6,7 +6,6 @@ import game.exceptions.PlayerDeathException;
 import items.armors.Armor;
 import items.weapons.Weapon;
 import org.jetbrains.annotations.NotNull;
-import player.debuffs.Debuff;
 import util.Interactive;
 import util.Randomized;
 
