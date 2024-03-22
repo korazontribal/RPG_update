@@ -13,6 +13,7 @@ import util.Interactive;
 import util.Randomized;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class Game {
 	 * El jugador del juego.
 	 */
 	private Player player;
+	private final int slot;
 	/**
 	 * La lista de enemigos del juego.
 	 */
@@ -34,8 +36,9 @@ public class Game {
 	/**
 	 * Constructor de la clase Game.
 	 */
-	public Game() {
+	public Game(int slot) {
 
+		this.slot = slot;
 		player = null;
 		enemies = new ArrayList<>(5);
 		enemies.add(new RookieGoblin());
@@ -43,6 +46,7 @@ public class Game {
 		enemies.add(new RookieGoblin());
 		enemies.add(new AloneWolf());
 		enemies.add(new RookieGoblin());
+		printMainMenu();
 	}
 
 	/**
@@ -57,7 +61,7 @@ public class Game {
 
 				case 1 -> {
 					try {
-						player = FileManager.loadGame();
+						player = FileManager.loadGame(new File("files\\game" + slot + ".dat"));
 						Interactive.printDialog("¡Bienvenido de nuevo!");
 					} catch (Exception e) {
 						player = new Player(JOptionPane.showInputDialog("Ingresa el nombre del jugador:"));
@@ -116,7 +120,7 @@ public class Game {
 	private void endGame() {
 
 		Interactive.printDialog("Gracias por jugar");
-		FileManager.saveGame(player);
+		FileManager.saveGame(player, slot);
 		enemies.clear();
 	}
 

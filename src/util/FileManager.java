@@ -6,22 +6,22 @@ import java.io.*;
 
 public class FileManager {
 
-	public static Player loadGame() throws FileNotFoundException {
+	public static Player loadGame(File file) throws FileNotFoundException {
 
-		Player player = null;
+		Player player;
 		try {
-			player = (Player) new ObjectInputStream(new FileInputStream("files/game.dat")).readObject();
+			player = (Player) new ObjectInputStream(new FileInputStream(file)).readObject();
 		} catch (IOException | ClassNotFoundException e) {
 			throw new FileNotFoundException("No se encontró el archivo");
 		}
 		return player;
 	}
 
-	public static void saveGame(Player player) {
+	public static void saveGame(Player player, int slot) {
 
 		ObjectOutputStream oos = null;
 		try {
-			oos = new ObjectOutputStream(new FileOutputStream("files/game.dat"));
+			oos = new ObjectOutputStream(new FileOutputStream("files/game" + slot + ".dat"));
 			oos.writeObject(player);
 			try {
 				oos.close();

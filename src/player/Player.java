@@ -57,6 +57,12 @@ public class Player extends BasicCharacter implements Serializable {
 		inventory = new Inventory();
 	}
 
+	@Override
+	public String toString() {
+
+		return String.format("%s - Nivel %d", getName(), level);
+	}
+
 	/**
 	 * Reparte aleatoriamente los puntos de fuerza, defensa, inteligencia, destreza y suerte.
 	 *
