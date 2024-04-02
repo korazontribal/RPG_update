@@ -1,7 +1,9 @@
 package gui.panels;
 
 import enemies.Enemy;
+import gui.game.GameWindow;
 import player.Player;
+import player.skills.Skill;
 import util.managers.ImageManager;
 
 import javax.swing.*;
@@ -13,9 +15,12 @@ public class SkillPanel extends JScrollPane {
 	private final Player player;
 	private final Enemy enemy;
 	private JPanel mainPanel;
+	private JPanel skillList;
+	private final GameWindow window;
 
-	public SkillPanel(Player player, Enemy enemy) {
+	public SkillPanel(Player player, Enemy enemy, GameWindow window) {
 
+		this.window = window;
 		this.player = player;
 		this.enemy = enemy;
 		this.img = ImageManager.getInstance().getImage("skillPanel");
@@ -25,6 +30,13 @@ public class SkillPanel extends JScrollPane {
 		setOpaque(false);
 		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		skillList.setLayout(new GridLayout(0, 1, 0, 10));
+		player.getSkillMap().forEach((k, v) -> addSkill(v));
+	}
+
+	private void addSkill(Skill skill) {
+
+		skillList.add(new SkillDetailPanel(skill, player, enemy, window));
 	}
 
 	private void createUIComponents() {
@@ -37,12 +49,7 @@ public class SkillPanel extends JScrollPane {
 				g.drawImage(img, 0, 0, null);
 			}
 		};
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setOpaque(false);
-	}
-
-	private void addSkill(String skillName) {
-
-		mainPanel.add(new JLabel(skillName));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 	}
 }

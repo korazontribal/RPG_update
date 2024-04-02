@@ -29,9 +29,11 @@ public class BattlePanel extends JPanel {
 	private JButton fleeButton;
 	private JScrollPane skillsPanel;
 	private JPanel skillBanner;
+	private GameWindow window;
 
 	public BattlePanel(ActionsPanel actionsPanel, GameWindow window, int tabIndex, Player player, Enemy enemy) {
 
+		this.window = window;
 		this.player = player;
 		this.enemy = enemy;
 		ImageManager imageManager = ImageManager.getInstance();
@@ -89,7 +91,7 @@ public class BattlePanel extends JPanel {
 		};
 		mainPanel.setOpaque(false);
 		mainPanel.setLayout(null);
-		skillsPanel = new SkillPanel(player, enemy);
+		skillsPanel = new SkillPanel(player, enemy, window);
 		attackButton = new JButton();
 		attackButton.setIcon(new ImageIcon(ImageManager.getInstance().getImage("attackButtonIdle")));
 		attackButton.setCursor(new Cursor(Cursor.HAND_CURSOR));

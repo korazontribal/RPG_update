@@ -136,22 +136,28 @@ public abstract class Enemy extends BasicCharacter {
 		return Math.max(0, (player.getDamage() - getDefense(player)));
 	}
 
+	public int calculateDamage(Player player, int damage) {
+
+		return Math.max(0, (damage - getDefense(player)));
+	}
+
 	public String takeDamage(Player player) {
 
 		int damage = calculateDamage(player);
-		String message = String.format("¡%s sufre %d punto(s) daños!", name, damage);
+		String message = String.format("¡%s sufre %d punto(s) de daño!\n", name, damage);
 		hp -= damage;
 		if (isDead())
-			message += String.format("\n¡%s ha sido derrotado!", name);
+			message += String.format("¡%s ha sido derrotado!\n", name);
 		return message;
 	}
 
-	public String takeDamage(int damage) {
+	public String takeDamage(Player player, int damage) {
 
-		hp -= damage;
-		String message = String.format("¡%s sufre %d punt(s) daños!", name, damage);
+		int finalDamage = calculateDamage(player, damage);
+		hp -= finalDamage;
+		String message = String.format("¡%s sufre %d punto(s) de daño!\n", name, finalDamage);
 		if (isDead())
-			message += String.format("\n¡%s ha sido derrotado!", name);
+			message += String.format("¡%s ha sido derrotado!\n", name);
 		return message;
 	}
 

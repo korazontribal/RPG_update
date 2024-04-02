@@ -28,6 +28,23 @@ public class TextLabel extends JLabel {
 		setFont(font);
 	}
 
+	public TextLabel(String displayText, Color color) {
+
+		this.displayText = displayText;
+		this.image = null;
+		int textWidth = FontManager.getInstance().getFont("Player").getSize() * displayText.length();
+		int textHeight = FontManager.getInstance().getFont("Player").getSize();
+		Dimension size = new Dimension(580, textHeight + 10);
+		setPreferredSize(size);
+		setMinimumSize(size);
+		setMaximumSize(size);
+		setSize(size);
+		Font font = FontManager.getInstance().getFont("Player");
+		setForeground(color);
+		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+		setFont(font);
+	}
+
 	public TextLabel(String displayText, String imageKey) {
 
 		this.displayText = displayText;

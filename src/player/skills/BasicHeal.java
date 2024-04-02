@@ -1,6 +1,9 @@
 package player.skills;
 
 import enemies.Enemy;
+import game.exceptions.EnemyDeadException;
+import gui.panels.CharactersPanel;
+import gui.panels.DialogPanel;
 import player.Player;
 
 public class BasicHeal extends Skill {
@@ -33,6 +36,13 @@ public class BasicHeal extends Skill {
 	@Override
 	public String effect(Player player, Enemy enemy) {
 
-		return null;
+		String message = effect(player);
+		((DialogPanel) getCharactersPanel().getDialogPanel()).getText().append(message);
+		try {
+			enemy.attack(player, getCharactersPanel());
+		} catch (EnemyDeadException e) {
+			throw new RuntimeException(e);
+		}
+		return message;
 	}
 }

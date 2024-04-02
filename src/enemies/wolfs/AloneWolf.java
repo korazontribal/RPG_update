@@ -64,7 +64,7 @@ public class AloneWolf extends Enemy {
 		} else {
 			throw new EnemyDeadException();
 		}
-		((DialogPanel) panel.getDialogPanel()).getText().append(message);
+		DialogPanel.getInstance().getText().append(message);
 	}
 
 	/**

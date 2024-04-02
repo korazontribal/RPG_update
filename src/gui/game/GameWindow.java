@@ -1,6 +1,7 @@
 package gui.game;
 
 import enemies.Enemy;
+import enemies.goblins.RookieGoblin;
 import gui.panels.*;
 import player.Player;
 import util.enemies.EnemyFactory;
@@ -9,6 +10,7 @@ import javax.swing.*;
 
 public class GameWindow extends JFrame {
 
+	private static GameWindow instance;
 	private Player player;
 	private Enemy enemy;
 	private JPanel rootPanel;
@@ -19,13 +21,27 @@ public class GameWindow extends JFrame {
 
 	public static void main(String[] args) {
 
-		new GameWindow();
+		GameWindow.getInstance().startGame();
 	}
 
-	public GameWindow() {
+	public static GameWindow getInstance() {
+
+		if (instance == null) {
+
+			instance = new GameWindow();
+		}
+		return instance;
+	}
+
+	private GameWindow() {
+
 		// Configuración de la ventana
 		setContentPane(rootPanel);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public void startGame() {
+
 		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);
@@ -39,13 +55,18 @@ public class GameWindow extends JFrame {
 //			JOptionPane.showMessageDialog(this, "No se encontró el archivo");
 //		}
 		player = new Player("Miguel");
-		enemy = EnemyFactory.generateRegularEnemy(player);
-		playerPanel = new PlayerPanel(player);
-		enemyPanel = new EnemyPanel(enemy);
-		charactersPanel = new CharactersPanel(player, enemy);
-		bottomPanel = new ActionsPanel();
-		new StatusPanel((ActionsPanel) bottomPanel, 0, player);
-		new BattlePanel((ActionsPanel) bottomPanel, this, 1, player, enemy);
+		//enemy = EnemyFactory.generateRegularEnemy(player);
+		enemy=new RookieGoblin(player);
+		playerPanel = PlayerPanel.getInstance(player);
+		enemyPanel = EnemyPanel.getInstance(enemy);
+		charactersPanel = CharactersPanel.getInstance(player, enemy, this);
+		String message = String.format("¡Bienvenido a la aventura, %s!\n", player.getName());
+		message += String.format("¡Un %s salvaje apareció!\n", enemy.getName());
+		DialogPanel.getInstance().getText().append(message);
+		System.out.println(DialogPanel.getInstance().getText().isEditable());
+		bottomPanel = ActionsPanel.getInstance();
+		new StatusPanel(ActionsPanel.getInstance(), 0, player);
+		new BattlePanel(ActionsPanel.getInstance(), this, 1, player, enemy);
 	}
 
 	public Player getPlayer() {
@@ -76,10 +97,5 @@ public class GameWindow extends JFrame {
 	public void setEnemy(Enemy enemy) {
 
 		this.enemy = enemy;
-	}
-
-	public void setCharactersPanel(CharactersPanel charactersPanel) {
-
-		this.charactersPanel = charactersPanel;
 	}
 }

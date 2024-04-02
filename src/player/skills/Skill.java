@@ -1,6 +1,7 @@
 package player.skills;
 
 import enemies.Enemy;
+import gui.panels.CharactersPanel;
 import player.Player;
 
 public abstract class Skill {
@@ -9,6 +10,7 @@ public abstract class Skill {
 	protected String description;
 	protected int level;
 	protected int manaCost;
+	protected CharactersPanel charactersPanel;
 
 	public Skill(String name, String description, int level, int manaCost) {
 
@@ -78,5 +80,15 @@ public abstract class Skill {
 	public void setManaCost(int manaCost) {
 
 		this.manaCost = manaCost;
+	}
+
+	public CharactersPanel getCharactersPanel() {
+
+		return charactersPanel;
+	}
+
+	public void setCharactersPanel(CharactersPanel charactersPanel) {
+
+		this.charactersPanel = charactersPanel;
 	}
 }

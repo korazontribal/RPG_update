@@ -4,6 +4,7 @@ import enemies.Enemy;
 import enemies.bats.TinyBat;
 import game.exceptions.EnemyDeadException;
 import game.exceptions.PlayerDeathException;
+import gui.game.GameWindow;
 import gui.labels.SpriteLabel;
 import player.Player;
 import util.managers.ImageManager;
@@ -13,8 +14,9 @@ import java.awt.*;
 
 public class CharactersPanel extends JPanel {
 
+	private static CharactersPanel instance;
 	private final Image img;
-	private final Player player;
+	private Player player;
 	private Enemy enemy;
 	private JPanel backgroundPanel;
 	private JPanel dialogPanel;
@@ -22,34 +24,26 @@ public class CharactersPanel extends JPanel {
 	private JPanel enemySpritePanel;
 	private JLabel playerSprite;
 	private JLabel enemySprite;
+	private final GameWindow window;
 
-	public static void main(String[] args) {
+	public static CharactersPanel getInstance(Player player, Enemy enemy, GameWindow window) {
 
-		Player player = new Player("Test");
-		Enemy enemy = new TinyBat(player);
-		JFrame frame = new JFrame("CharactersPanel");
-		CharactersPanel charactersPanel = new CharactersPanel(player, enemy);
-		frame.setContentPane(charactersPanel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		try {
-			player.attack(enemy, charactersPanel);
-			enemy.attack(player, charactersPanel);
-			player.attack(enemy, charactersPanel);
-			enemy.attack(player, charactersPanel);
-			player.attack(enemy, charactersPanel);
-			enemy.attack(player, charactersPanel);
-		} catch (PlayerDeathException | EnemyDeadException e) {
-			throw new RuntimeException(e);
+
+		if (instance == null) {
+
+			instance = new CharactersPanel(player, enemy, window);
+		}else {
+			instance.setEnemy(enemy);
+			instance.setPlayer(player);
 		}
+		return instance;
 	}
 
-	public CharactersPanel(Player player, Enemy enemy) {
+	private CharactersPanel(Player player, Enemy enemy, GameWindow window) {
 
-		this.enemy = enemy;
 		this.player = player;
+		this.enemy = enemy;
+		this.window = window;
 		this.img = ImageManager.getInstance().getImage("charactersPanel");
 		Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
 		setPreferredSize(size);
@@ -74,7 +68,7 @@ public class CharactersPanel extends JPanel {
 	public void updateEnemy(Enemy enemy) {
 
 		this.enemy = enemy;
-		((SpriteLabel)enemySprite).updateImage(enemy.getImage());
+		((SpriteLabel) enemySprite).updateImage(enemy.getImage());
 		enemySpritePanel.repaint();
 		dialogPanel.repaint();
 		playerSpritePanel.repaint();
@@ -85,7 +79,7 @@ public class CharactersPanel extends JPanel {
 
 		playerSprite = new SpriteLabel(player.getImage());
 		enemySprite = new SpriteLabel(enemy.getImage());
-		dialogPanel = new DialogPanel();
+		dialogPanel = DialogPanel.getInstance();
 	}
 
 	public Image getImg() {
@@ -166,5 +160,14 @@ public class CharactersPanel extends JPanel {
 	public void setEnemySprite(JLabel enemySprite) {
 
 		this.enemySprite = enemySprite;
+	}
+
+	public GameWindow getWindow() {
+
+		return window;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 }

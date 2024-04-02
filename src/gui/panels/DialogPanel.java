@@ -5,18 +5,25 @@ import util.managers.ImageManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DialogPanel extends JPanel {
 
+	private static DialogPanel instance;
 	private final Image img;
 	private JPanel backgrounPanel;
 	private JTextArea text;
-	private JPanel textPanel;
 	private JScrollPane scrollPanel;
 
-	public DialogPanel() {
+	public static DialogPanel getInstance() {
+
+		if (instance == null) {
+
+			instance = new DialogPanel();
+		}
+		return instance;
+	}
+
+	private DialogPanel() {
 
 		img = ImageManager.getInstance().getImage("dialogPanel");
 		add(backgrounPanel);
@@ -25,18 +32,9 @@ public class DialogPanel extends JPanel {
 		setPreferredSize(size);
 		setMinimumSize(size);
 		setMaximumSize(size);
-		text.setFont(FontManager.getInstance().getFont("Player"));
-		text.setForeground(Color.WHITE);
-		text.setLineWrap(true);
-		text.setWrapStyleWord(true);
-		text.setEditable(false);
-		text.setOpaque(false);
-		text.setAutoscrolls(true);
 		scrollPanel.setOpaque(false);
 		scrollPanel.getViewport().setOpaque(false);
 		scrollPanel.setBorder(BorderFactory.createEmptyBorder());
-		int delay = 100; // Delay en milisegundos entre cada letra
-
 	}
 
 	public void paintComponent(Graphics g) {
@@ -61,5 +59,22 @@ public class DialogPanel extends JPanel {
 	public JTextArea getText() {
 
 		return text;
+	}
+
+	private void createUIComponents() {
+
+		text=new JTextArea();
+		text.setFont(FontManager.getInstance().getFont("Player"));
+		text.setForeground(Color.WHITE);
+		text.setOpaque(false);
+		text.setLineWrap(true);
+		text.setWrapStyleWord(true);
+		text.setAutoscrolls(true);
+		text.setEditable(true);
+		scrollPanel=new JScrollPane(text);
+		scrollPanel.setOpaque(false);
+		scrollPanel.getViewport().setOpaque(false);
+		scrollPanel.setBorder(BorderFactory.createEmptyBorder());
+		scrollPanel.setAutoscrolls(true);
 	}
 }

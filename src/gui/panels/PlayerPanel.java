@@ -12,17 +12,27 @@ import java.awt.*;
 
 public class PlayerPanel extends JPanel {
 
+	private static PlayerPanel instance;
 	private final Image background;
 	private Player player;
 	private JPanel backgroundPanel;
-	private JLabel portraidLabel;
+	private JLabel portraitLabel;
 	private JLabel playerName;
 	private JLabel jobLabel;
 	private JLabel hpLabel;
 	private JLabel levelLabel;
 	private JLabel mpLabel;
 
-	public PlayerPanel(Player player) {
+	public static PlayerPanel getInstance(Player player) {
+
+		if (instance == null) {
+
+			instance = new PlayerPanel(player);
+		}
+		return instance;
+	}
+
+	private PlayerPanel(Player player) {
 
 		this.player = player;
 		background = ImageManager.getInstance().getImage("playerPanel");
@@ -38,7 +48,8 @@ public class PlayerPanel extends JPanel {
 	public void updatePlayer(Player player) {
 
 		this.player = player;
-		((HpLabel)hpLabel).updateCharacter(player);
+		((HpLabel) hpLabel).updateCharacter(player);
+		((MpLabel) mpLabel).updateCharacter(player);
 		mpLabel.repaint();
 	}
 
@@ -56,7 +67,7 @@ public class PlayerPanel extends JPanel {
 
 	private void createUIComponents() {
 
-		portraidLabel = new PortraitLabel();
+		portraitLabel = PortraitLabel.getInstance();
 		playerName = new TextLabel(player.getName(), "textHolder");
 		levelLabel = new TextLabel(String.format("Nivel: %d", player.getLevel()), "textHolder");
 		if (player.getJob() != null) {
@@ -66,6 +77,6 @@ public class PlayerPanel extends JPanel {
 			jobLabel = new TextLabel("Aventurero", "jobHolder");
 		}
 		hpLabel = new HpLabel(player);
-		mpLabel = new MpLabel(player);
+		mpLabel = MpLabel.getInstance(player);
 	}
 }

@@ -10,7 +10,18 @@ import java.awt.*;
 
 public class ActionsPanel extends JTabbedPane {
 
-	public ActionsPanel() {
+	private static ActionsPanel instance;
+
+	public static ActionsPanel getInstance() {
+
+		if (instance == null) {
+
+			instance = new ActionsPanel();
+		}
+		return instance;
+	}
+
+	private ActionsPanel() {
 
 		super();
 		Dimension size = new Dimension(1719, 480);

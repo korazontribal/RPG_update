@@ -17,37 +17,38 @@ public class AttackButtonAction implements ActionListener {
 	private final Player player;
 	private Enemy enemy;
 	private GameWindow window;
-	private PlayerPanel playerPanel;
-	private EnemyPanel enemyPanel;
-	private CharactersPanel charactersPanel;
 
 	public AttackButtonAction(Player player, Enemy enemy, GameWindow window) {
 
 		this.player = player;
 		this.enemy = enemy;
 		this.window = window;
-		playerPanel = (PlayerPanel) window.getPlayerPanel();
-		enemyPanel = (EnemyPanel) window.getEnemyPanel();
-		charactersPanel = (CharactersPanel) window.getBattlePanel();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		((DialogPanel) charactersPanel.getDialogPanel()).setText("");
+		CharactersPanel charactersPanel = CharactersPanel.getInstance(player, enemy, window);
+		this.enemy = GameWindow.getInstance().getEnemy();
 		if (player.getSpeed() > enemy.getStats().get(Stats.SPEED)) {
+
 			try {
+
 				player.attack(enemy, charactersPanel);
 				if (!enemy.isDead()) {
+
 					enemy.attack(player, charactersPanel);
 				}
 			} catch (PlayerDeathException | EnemyDeadException ex) {
+
 				throw new RuntimeException(ex);
 			}
 		} else {
 			try {
+
 				enemy.attack(player, charactersPanel);
-				if (!player.isDead()) {
+				if (!player.isDead() && !enemy.isDead()) {
+
 					player.attack(enemy, charactersPanel);
 				}
 			} catch (PlayerDeathException | EnemyDeadException ex) {
@@ -57,11 +58,10 @@ public class AttackButtonAction implements ActionListener {
 		if (enemy.isDead()) {
 
 			enemy = EnemyFactory.generateRegularEnemy(player);
-			window.setEnemy(enemy);
-			charactersPanel.updateEnemy(enemy);
-			((DialogPanel) charactersPanel.getDialogPanel()).setText("");
+			GameWindow.getInstance().setEnemy(enemy);
+			CharactersPanel.getInstance(player, enemy, window).updateEnemy(enemy);
 		}
-		enemyPanel.updateEnemy(enemy);
-		playerPanel.updatePlayer(player);
+		EnemyPanel.getInstance(enemy).updateEnemy();
+		PlayerPanel.getInstance(player).updatePlayer(player);
 	}
 }

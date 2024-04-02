@@ -3,8 +3,10 @@ package player;
 import characters.BasicCharacter;
 import enemies.Enemy;
 import game.exceptions.PlayerDeathException;
+import gui.game.GameWindow;
 import gui.panels.CharactersPanel;
 import gui.panels.DialogPanel;
+import gui.panels.EnemyPanel;
 import items.armors.Armor;
 import items.armors.ArmorType;
 import items.weapons.Weapon;
@@ -167,10 +169,7 @@ public class Player extends BasicCharacter implements Serializable {
 
 		if (!isDead()) {
 
-			DialogPanel dialogPanel = (DialogPanel) panel.getDialogPanel();
-			dialogPanel.getText().append(String.format("¡%s ataca con %d punto(s) de daño!\n%s", getName(), getDamage(),
-					enemy.takeDamage(this)));
-			dialogPanel.getText().append("\n");
+			DialogPanel.getInstance().getText().append(String.format("%s", enemy.takeDamage(this)));
 			if (enemy.isDead()) getRewards(enemy, panel);
 		} else {
 			throw new PlayerDeathException();
@@ -408,7 +407,7 @@ public class Player extends BasicCharacter implements Serializable {
 		if (damage < 0) damage = 0;
 		message = super.takeDamage(damage);
 		if (isDead())
-			message += String.format("\n%s", printDeath());
+			message += String.format("%s\n", printDeath());
 		return message;
 	}
 
@@ -601,5 +600,10 @@ public class Player extends BasicCharacter implements Serializable {
 
 		return ImageManager.getInstance().getImage("player",
 				new ImageIcon("img\\player\\player.png").getImage());
+	}
+
+	public Map<String, Skill> getSkillMap() {
+
+		return skillMap;
 	}
 }

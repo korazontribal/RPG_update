@@ -22,8 +22,8 @@ public abstract class BasicCharacter implements Serializable {
 	public String takeDamage(int damage) {
 
 		hp -= damage;
-		String message = String.format("¡%s recibe %d puntos de daño!", name, damage);
-		if (isDead()) message += String.format("\n¡%s ha sido derrotado!", name);
+		String message = String.format("¡%s recibe %d puntos de daño!\n", name, damage);
+		if (isDead()) message += String.format("¡%s ha sido derrotado!\n", name);
 		return message;
 	}
 

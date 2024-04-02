@@ -15,7 +15,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="f8f61" binding="textPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
+      <grid id="f8f61" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -29,23 +29,26 @@
         </properties>
         <border type="none"/>
         <children>
-          <scrollpane id="a7b25" binding="scrollPanel">
+          <scrollpane id="a7b25" binding="scrollPanel" custom-create="true">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <horizontalScrollBarPolicy value="31"/>
               <opaque value="false"/>
+              <verticalScrollBarPolicy value="22"/>
             </properties>
             <border type="none"/>
             <children>
-              <component id="2eb64" class="javax.swing.JTextArea" binding="text">
+              <component id="2eb64" class="javax.swing.JTextArea" binding="text" custom-create="true">
                 <constraints/>
                 <properties>
                   <alignmentY value="0.0"/>
                   <autoscrolls value="true"/>
+                  <dropMode value="USE_SELECTION"/>
                   <editable value="false"/>
                   <enabled value="true"/>
-                  <focusable value="false"/>
+                  <focusable value="true"/>
                   <inheritsPopupMenu value="true"/>
                   <lineWrap value="true"/>
                   <opaque value="false"/>

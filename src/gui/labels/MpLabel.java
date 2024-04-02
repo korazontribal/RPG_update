@@ -1,5 +1,6 @@
 package gui.labels;
 
+import characters.BasicCharacter;
 import player.Player;
 import util.managers.FontManager;
 import util.managers.ImageManager;
@@ -9,10 +10,35 @@ import java.awt.*;
 
 public class MpLabel extends JLabel {
 
-	private final Image image;
-	private final String text;
+	private static MpLabel instance;
+	private BasicCharacter character;
+	private Image image;
+	private String text;
 
-	public MpLabel(Player player) {
+public static MpLabel getInstance(Player character) {
+
+		if (instance == null) {
+
+			instance = new MpLabel(character);
+		}
+		return instance;
+	}
+
+	private MpLabel(Player player) {
+
+		this.character = player;
+		init(player);
+		Font font = FontManager.getInstance().getFont("Player");
+		Dimension size = new Dimension(image.getWidth(null), image.getHeight(null) + 10);
+		setPreferredSize(size);
+		setMinimumSize(size);
+		setMaximumSize(size);
+		setSize(size);
+		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+		setFont(font);
+	}
+
+	private void init(Player player) {
 
 		ImageManager imageManager = ImageManager.getInstance();
 		text = String.format("%d/%d", player.getMp(), player.getMaxMp());
@@ -37,15 +63,7 @@ public class MpLabel extends JLabel {
 			image = imageManager.getImage("mp0");
 			color = new Color(255, 255, 255, 255);
 		}
-		Font font = FontManager.getInstance().getFont("Player");
-		Dimension size = new Dimension(image.getWidth(null), image.getHeight(null) + 10);
-		setPreferredSize(size);
-		setMinimumSize(size);
-		setMaximumSize(size);
-		setSize(size);
 		setForeground(color);
-		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-		setFont(font);
 	}
 
 	@Override
@@ -57,10 +75,17 @@ public class MpLabel extends JLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.drawImage(image, 0, 10, null);
 		int textPositionY = image.getHeight(null) / 2 + 8 + g2d.getFontMetrics().getHeight() / 4;
-		int textPositionX = ((image.getWidth(null)-37) / 2) - (g2d.getFontMetrics().stringWidth(text) / 2);
+		int textPositionX = ((image.getWidth(null) - 37) / 2) - (g2d.getFontMetrics().stringWidth(text) / 2);
 		g2d.translate(textPositionX, textPositionY);
 		BasicStroke contorno = new BasicStroke(5.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 		g2d.setStroke(contorno);
 		g2d.drawString(text, 0, 0);
+	}
+
+	public void updateCharacter(BasicCharacter character) {
+
+		this.character = character;
+		init((Player) this.character);
+		repaint();
 	}
 }
