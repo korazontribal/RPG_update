@@ -2,11 +2,17 @@ package enemies.wolfs;
 
 import enemies.Enemy;
 import game.exceptions.EnemyDeadException;
-import items.armors.helmets.WoodHelmet;
+import gui.panels.CharactersPanel;
+import gui.panels.DialogPanel;
+import items.armors.head.WoodHelmet;
 import items.misc.WolfFur;
 import player.Player;
-import util.Interactive;
-import util.Randomized;
+import player.Stats;
+import util.annotations.RegularEnemy;
+import util.interfaces.Interactive;
+import util.interfaces.Randomized;
+
+import javax.swing.*;
 
 /**
  * La clase AloneWolf es una subclase de la clase Enemy. Es un enemigo básico que el jugador puede encontrar en el juego.
@@ -15,14 +21,22 @@ import util.Randomized;
  * El método howl permite que AloneWolf aúlle.
  * El método bite permite que AloneWolf muerda al jugador provocando una cantidad determinada de daño.
  */
+@RegularEnemy
 public class AloneWolf extends Enemy {
 
 	/**
 	 * Constructor de la clase Lobo solitario.
 	 */
-	public AloneWolf() {
+	public AloneWolf(Player player) {
 
-		super("Lobo solitario", 30, 5, 10, 10);
+		super(player, "Lobo solitario", 10, 10, 5, 4);
+		image = imageManager.getImage("aloneWolf",
+				new ImageIcon("img\\enemies\\wolfs\\aloneWolf.png").getImage());
+		stats.put(Stats.ATTACK, 8);
+		stats.put(Stats.DEFENSE, 3);
+		stats.put(Stats.LUCK, 3);
+		stats.put(Stats.SPEED, 5);
+		stats.put(Stats.DEXTERITY, 4);
 	}
 
 	/**
@@ -31,8 +45,9 @@ public class AloneWolf extends Enemy {
 	 * @param player Jugador al que se le ataca.
 	 */
 	@Override
-	public void attack(Player player) throws EnemyDeadException {
+	public void attack(Player player, CharactersPanel panel) throws EnemyDeadException {
 
+		String message;
 		if (!isDead()) {
 
 			double simpleAttackProbability = 0.5;
@@ -43,12 +58,13 @@ public class AloneWolf extends Enemy {
 			// simpleAttackProbability = 50%, howlProbability = 30%, biteProbability = 20%
 			// simpleAttackProbability + howlProbability + biteProbability = 100%
 			// ratio = 0.0 - 0.5 -> simpleAttack, ratio = 0.51 - 0.7 -> bite, ratio = 0.71 - 1.0 -> howl
-			if (ratio <= simpleAttackProbability) simpleAttack(player);
-			else if (ratio <= simpleAttackProbability + biteProbability) bite(player);
-			else howl(player);
+			if (ratio <= simpleAttackProbability) message = simpleAttack(player);
+			else if (ratio <= simpleAttackProbability + biteProbability) message = bite(player);
+			else message = howl(player);
 		} else {
 			throw new EnemyDeadException();
 		}
+		((DialogPanel) panel.getDialogPanel()).getText().append(message);
 	}
 
 	/**
@@ -57,10 +73,15 @@ public class AloneWolf extends Enemy {
 	 * @param player Jugador al que se le suelta el objeto.
 	 */
 	@Override
-	public void dropItem(Player player) {
+	public void dropItem(Player player, CharactersPanel panel) {
 
-		int ratio = Randomized.randomizeNumber(1, 100);
-		player.getInventory().addItem(ratio > 65 ? new WoodHelmet() : new WolfFur());
+		if (getLevel() > 5) {
+
+			int ratio = Randomized.randomizeNumber(1, 100);
+			player.getInventory().addItem(ratio > 65 ? new WoodHelmet() : new WolfFur(), (DialogPanel) panel.getDialogPanel());
+		} else {
+			player.getInventory().addItem(new WolfFur(), (DialogPanel) panel.getDialogPanel());
+		}
 	}
 
 	/**
@@ -68,10 +89,12 @@ public class AloneWolf extends Enemy {
 	 *
 	 * @param player Jugador al que se le ataca.
 	 */
-	public void simpleAttack(Player player) {
+	public String simpleAttack(Player player) {
 
-		Interactive.printDialog(String.format("¡%s ataca con %d puntos de daño!", getName(), getDamage()));
-		player.takeDamage(getDamage());
+		int damage = getDamage(player);
+		String message = String.format("¡%s ataca con %d punto(s) de daño!\n", getName(), damage);
+		message += player.takeDamage(damage);
+		return message;
 	}
 
 	/**
@@ -79,10 +102,10 @@ public class AloneWolf extends Enemy {
 	 *
 	 * @param player Jugador al que se le aúlla.
 	 */
-	public void howl(Player player) {
+	public String howl(Player player) {
 
-		Interactive.printDialog("¡Lobo solitario aúlla!");
 		//TODO: Implementar efecto de aullido.
+		return String.format("¡%s aúlla!\n", getName());
 	}
 
 	/**
@@ -90,10 +113,10 @@ public class AloneWolf extends Enemy {
 	 *
 	 * @param player Jugador al que se le muerde.
 	 */
-	public void bite(Player player) {
+	public String bite(Player player) {
 
-		int totalDamage = getDamage() + 3;
-		Interactive.printDialog(String.format("¡%s muerde con %d puntos de daño!", getName(), totalDamage));
-		player.takeDamage(totalDamage);
+		int totalDamage = getDamage(player) + 3;
+		String message = String.format("¡%s muerde con %d punto(s) de daño!\n", getName(), totalDamage);
+		return message + player.takeDamage(totalDamage);
 	}
 }

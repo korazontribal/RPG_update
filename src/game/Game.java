@@ -1,16 +1,14 @@
 package game;
 
 import enemies.Enemy;
-import enemies.goblins.RookieGoblin;
-import enemies.wolfs.AloneWolf;
 import game.exceptions.EnemyDeadException;
 import game.exceptions.InvalidOptionException;
 import game.exceptions.PlayerDeathException;
 import org.jetbrains.annotations.NotNull;
 import player.Player;
-import util.FileManager;
-import util.Interactive;
-import util.Randomized;
+import util.managers.FileManager;
+import util.interfaces.Interactive;
+import util.interfaces.Randomized;
 
 import javax.swing.*;
 import java.io.File;
@@ -41,11 +39,11 @@ public class Game {
 		this.slot = slot;
 		player = null;
 		enemies = new ArrayList<>(5);
-		enemies.add(new RookieGoblin());
+		/*enemies.add(new RookieGoblin());
 		enemies.add(new AloneWolf());
 		enemies.add(new RookieGoblin());
 		enemies.add(new AloneWolf());
-		enemies.add(new RookieGoblin());
+		enemies.add(new RookieGoblin());*/
 		printMainMenu();
 	}
 
@@ -96,7 +94,7 @@ public class Game {
 			int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 			switch (option) {
 
-				case 1 -> player.displayData();
+				case 1 -> Interactive.printDialog(" ");
 				case 2 -> player.getInventory().printItems();
 				case 3 -> attackCycle();
 				case 4 -> equipWeaponMenu();
@@ -182,7 +180,7 @@ public class Game {
 			} catch (EnemyDeadException e) {
 
 				Interactive.printDialog("El enemigo ha muerto!");
-				enemy.setHealth(0);
+				enemy.setHp(0);
 			}
 		}
 	}
@@ -209,11 +207,11 @@ public class Game {
 	 */
 	private void battleOrder(Enemy enemy) throws PlayerDeathException, EnemyDeadException {
 
-		player.attack(enemy);
-		if (!enemy.isDead()) {
-			enemy.attack(player);
-		}
-		battleMenu(enemy);
+//		player.attack(enemy);
+//		if (!enemy.isDead()) {
+//			enemy.attack(player);
+//		}
+//		battleMenu(enemy);
 	}
 
 	/**
@@ -225,7 +223,7 @@ public class Game {
 
 		if (Randomized.randomizeBoolean()) {
 			player.printRun();
-			enemy.setHealth(0);
+			enemy.setHp(0);
 		} else {
 			Interactive.printDialog("No has podido huir!");
 			battleMenu(enemy);

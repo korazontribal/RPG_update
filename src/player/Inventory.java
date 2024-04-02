@@ -1,10 +1,12 @@
 package player;
 
+import gui.panels.CharactersPanel;
+import gui.panels.DialogPanel;
 import items.Item;
 import items.armors.Armor;
 import items.weapons.Weapon;
 import util.FixedArrayList;
-import util.Interactive;
+import util.interfaces.Interactive;
 
 import javax.swing.*;
 import java.io.Serializable;
@@ -81,8 +83,23 @@ public class Inventory implements Serializable {
 	private void equipArmorAction(Player player, List<Armor> armors, int option) {
 
 		Armor selectedArmor = armors.get(option - 1);
-		if (player.getArmor() != null)
-			items.add(player.getArmor());
+		switch (selectedArmor.getType()) {
+			case HEAD -> {
+				if (player.getHeadArmor() != null) items.add(player.getHeadArmor());
+			}
+			case CHEST -> {
+				if (player.getChestArmor() != null) items.add(player.getChestArmor());
+			}
+			case LEGS -> {
+				if (player.getLegArmor() != null) items.add(player.getLegArmor());
+			}
+			case HANDS -> {
+				if (player.getHandArmor() != null) items.add(player.getHandArmor());
+			}
+			case FEET -> {
+				if (player.getFootArmor() != null) items.add(player.getFootArmor());
+			}
+		}
 		player.equipArmor(selectedArmor);
 		player.printEquipArmor(selectedArmor);
 		items.remove(selectedArmor);
@@ -112,9 +129,9 @@ public class Inventory implements Serializable {
 	/**
 	 * Realiza la acción de equipar un arma.
 	 *
-	 * @param player el jugador que equipará el arma
+	 * @param player  el jugador que equipará el arma
 	 * @param weapons la lista de armas
-	 * @param option la opción seleccionada
+	 * @param option  la opción seleccionada
 	 */
 	private void equipWeaponAction(Player player, List<Weapon> weapons, int option) {
 
@@ -153,10 +170,10 @@ public class Inventory implements Serializable {
 	 *
 	 * @param item el elemento a agregar
 	 */
-	public void addItem(Item item) {
+	public void addItem(Item item, DialogPanel panel) {
 
 		String addMessage = String.format("%s se ha agregado al Inventario!", item.getName());
-		Interactive.printDialog(items.add(item) ? addMessage : "Inventario Lleno.");
+		panel.getText().append(items.add(item) ? addMessage : "Inventario Lleno.");
 	}
 
 	/**

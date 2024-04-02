@@ -6,16 +6,15 @@ import java.io.Serializable;
 
 public abstract class Weapon extends Item implements Serializable {
 
-	protected int atk;
-
-	public Weapon(String name, String description, int price, int atk) {
+	public Weapon(String name, String description, int price) {
 
 		super(name, description, price);
-		this.atk = atk;
+		initStats();
 	}
 
-	public int getAtk() {
+	public abstract String effect();
 
-		return atk;
-	}
+	protected abstract void initStats();
+
+	public abstract void callEffect();
 }

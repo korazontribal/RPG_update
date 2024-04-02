@@ -1,28 +1,46 @@
 package items.armors;
 
 import items.Item;
+import player.Player;
+import player.Stats;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public abstract class Armor extends Item implements Serializable {
 
-	protected int def;
+	protected HashMap<Stats, Integer> stats = new HashMap<>();
+	protected ArmorType type;
 
-	public Armor(String name, String description, int price, int def) {
+	public Armor(String name, String description, int price) {
 
 		super(name, description, price);
-		this.def = def;
+		initStats();
 	}
 
-	public abstract void effect();
+	public abstract String effect();
 
-	public int getDef() {
+	protected abstract void initStats();
 
-		return def;
+	public abstract void callEffect(Player player);
+
+	public HashMap<Stats, Integer> getStats() {
+
+		return stats;
 	}
 
-	public void setDef(int def) {
+	public void setStats(HashMap<Stats, Integer> stats) {
 
-		this.def = def;
+		this.stats = stats;
+	}
+
+	public ArmorType getType() {
+
+		return type;
+	}
+
+	public void setType(ArmorType type) {
+
+		this.type = type;
 	}
 }

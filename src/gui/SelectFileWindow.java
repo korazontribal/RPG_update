@@ -1,13 +1,14 @@
 package gui;
 
+import gui.buttons.BackGroundButton;
+import gui.panels.BackgroundPanel;
 import player.Player;
-import util.FileManager;
+import util.managers.FileManager;
+import util.managers.FontManager;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class SelectFileWindow extends JFrame {
 	private JPanel rootPane;
@@ -16,6 +17,7 @@ public class SelectFileWindow extends JFrame {
 	private JButton button3;
 	private JLabel gameName;
 	private JLabel icono;
+	private final FontManager fontManager;
 
 	public static void main(String[] args) {
 
@@ -23,6 +25,8 @@ public class SelectFileWindow extends JFrame {
 	}
 
 	public SelectFileWindow() {
+		//Iniciamos la caché de fuentes
+		fontManager = FontManager.getInstance();
 		//Título de la ventana
 		setTitle("Ventana de selección de archivo");
 		//Cambiamos la fuente de los elementos de la ventana
@@ -46,26 +50,17 @@ public class SelectFileWindow extends JFrame {
 	 */
 	private void changeFont() {
 
-		//Intentamos cargar la fuente y si no se puede, mostramos un mensaje de error
-		try {
-			//Cargar la fuente y cambiar la fuente de los elementos de la ventana
-			Font myfont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\FortunerHeavyPersonalUse.otf"))
-					.deriveFont(24f);
-			//Colocamos opaco en falso para que se vea el fondo de la ventana
-			gameName.setOpaque(false);
-			//Colocamos el fondo de la etiqueta en nulo
-			gameName.setBackground(null);
-			gameName.setText("HOLA");
-			//Colocamos el icono de la etiqueta con la imagen 23.png
-			gameName.setIcon(new ImageIcon("img\\23.png"));
-			//Cambiamos la fuente de la etiqueta
-			gameName.setFont(myfont);
-			//Agregamos a la etiqueta vaciá la imagen 17.png
-			icono.setIcon(new ImageIcon("img\\17.png"));
-		} catch (FontFormatException | IOException e) {
-			JOptionPane.showMessageDialog(this, "Error al cargar la fuente",
-					"Error", JOptionPane.ERROR_MESSAGE);
-		}
+		//Colocamos opaco en falso para que se vea el fondo de la ventana
+		gameName.setOpaque(false);
+		//Colocamos el fondo de la etiqueta en nulo
+		gameName.setBackground(null);
+		gameName.setText("HOLA");
+		//Colocamos el icono de la etiqueta con la imagen 23.png
+		gameName.setIcon(new ImageIcon("img\\23.png"));
+		//Cambiamos la fuente de la etiqueta
+		gameName.setFont(fontManager.getFont("Game Title"));
+		//Agregamos a la etiqueta vaciá la imagen 17.png
+		icono.setIcon(new ImageIcon("img\\17.png"));
 	}
 
 	/**

@@ -1,7 +1,7 @@
 package items.potions;
 
 import player.Player;
-import util.Usable;
+import util.interfaces.Usable;
 
 public record ManaPotion(PotionSize size) implements Usable {
 
