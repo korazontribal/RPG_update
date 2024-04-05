@@ -71,6 +71,10 @@ public class DialogPanel extends JPanel {
 		text.setWrapStyleWord(true);
 		text.setAutoscrolls(true);
 		text.setEditable(true);
+		text.setAutoscrolls(true);
+		text.setWrapStyleWord(true);
+		text.setDropMode(DropMode.INSERT);
+		text.requestFocus();
 		scrollPanel=new JScrollPane(text);
 		scrollPanel.setOpaque(false);
 		scrollPanel.getViewport().setOpaque(false);

@@ -4,7 +4,6 @@ import enemies.Enemy;
 import enemies.goblins.RookieGoblin;
 import gui.panels.*;
 import player.Player;
-import util.enemies.EnemyFactory;
 
 import javax.swing.*;
 
@@ -38,6 +37,8 @@ public class GameWindow extends JFrame {
 		// Configuración de la ventana
 		setContentPane(rootPanel);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("RPG");
+		DialogPanel.getInstance().getText().requestFocus();
 	}
 
 	public void startGame() {
@@ -45,6 +46,7 @@ public class GameWindow extends JFrame {
 		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);
+		setResizable(false);
 	}
 
 	private void createUIComponents() {
@@ -55,17 +57,17 @@ public class GameWindow extends JFrame {
 //			JOptionPane.showMessageDialog(this, "No se encontró el archivo");
 //		}
 		player = new Player("Miguel");
+		player.gainExperience(18);
 		//enemy = EnemyFactory.generateRegularEnemy(player);
-		enemy=new RookieGoblin(player);
+		enemy = new RookieGoblin(player);
 		playerPanel = PlayerPanel.getInstance(player);
 		enemyPanel = EnemyPanel.getInstance(enemy);
 		charactersPanel = CharactersPanel.getInstance(player, enemy, this);
 		String message = String.format("¡Bienvenido a la aventura, %s!\n", player.getName());
 		message += String.format("¡Un %s salvaje apareció!\n", enemy.getName());
 		DialogPanel.getInstance().getText().append(message);
-		System.out.println(DialogPanel.getInstance().getText().isEditable());
 		bottomPanel = ActionsPanel.getInstance();
-		new StatusPanel(ActionsPanel.getInstance(), 0, player);
+		StatusPanel.getInstance(ActionsPanel.getInstance(), 0, player);
 		new BattlePanel(ActionsPanel.getInstance(), this, 1, player, enemy);
 	}
 
@@ -97,5 +99,10 @@ public class GameWindow extends JFrame {
 	public void setEnemy(Enemy enemy) {
 
 		this.enemy = enemy;
+	}
+
+	public StatusPanel getStatusPanel() {
+
+		return (StatusPanel) ActionsPanel.getInstance().getComponent(0);
 	}
 }

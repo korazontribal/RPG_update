@@ -86,8 +86,8 @@ public class HpLabel extends JLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.drawImage(image, 0, 10, null);
-		int textPositionY = image.getHeight(null) / 2 + 8 + g2d.getFontMetrics().getHeight() / 4;
-		int textPositionX = ((image.getWidth(null) - 37) / 2) + 37 - (g2d.getFontMetrics().stringWidth(text) / 2);
+		int textPositionY = image.getHeight(null) / 2 + 10 + g2d.getFontMetrics().getHeight() / 4;
+		int textPositionX = ((image.getWidth(null) - 28) / 2) + 28 - (g2d.getFontMetrics().stringWidth(text) / 2);
 		g2d.translate(textPositionX, textPositionY);
 		BasicStroke contorno = new BasicStroke(5.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 		g2d.setStroke(contorno);

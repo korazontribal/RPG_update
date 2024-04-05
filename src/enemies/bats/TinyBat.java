@@ -68,7 +68,7 @@ public class TinyBat extends Enemy {
 
 	public String screech(Player player) {
 
-		int damage = getDamage(player) + 3;
+		int damage = getAdjustedAttack() + 3;
 		String message = String.format("¡%s emite un chillido ensordecedor que causa %d punto(s) de daño!\n", getName(),
 				damage);
 		message += player.takeDamage(damage);

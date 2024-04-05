@@ -5,6 +5,7 @@ import gui.game.GameWindow;
 import gui.labels.HpLabel;
 import gui.labels.TextLabel;
 import player.Stats;
+import util.managers.FontManager;
 import util.managers.ImageManager;
 
 import javax.swing.*;
@@ -36,6 +37,10 @@ public class EnemyPanel extends JPanel {
 
 		this.enemy = enemy;
 		background = ImageManager.getInstance().getImage("enemyPanel");
+		Font font = FontManager.getInstance().getFont("Player");
+		enemyName.setFont(font);
+		enemyName.setForeground(new Color(95, 0, 0, 255));
+		enemyName.setText(enemy.getName());
 		add(backgroundPanel);
 		setPreferredSize(backgroundPanel.getPreferredSize());
 		Dimension size = new Dimension(background.getWidth(null), background.getHeight(null));
@@ -48,14 +53,8 @@ public class EnemyPanel extends JPanel {
 	public void updateEnemy() {
 
 		this.enemy = GameWindow.getInstance().getEnemy();
-		System.out.println(String.format("Updating enemy: %s - %d/%d", enemy.getName(), enemy.getHp(), enemy.getMaxHp()));
 		((HpLabel) enemyHp).updateCharacter(this.enemy);
-		((TextLabel) enemyName).updateName(this.enemy.getName());
-		((TextLabel) attackLabel).setDisplayText(String.format("FUE: %d", this.enemy.getStats().get(Stats.ATTACK)));
-		((TextLabel) defenseLabel).setDisplayText(String.format("DEF: %d", this.enemy.getStats().get(Stats.DEFENSE)));
-		((TextLabel) expLabel).setDisplayText(String.format("EXP: %d", this.enemy.getExperience()));
-		((TextLabel) golldLabel).setDisplayText(String.format("ORO: %d", this.enemy.getGold()));
-		enemyName.repaint();
+		enemyName.setText(enemy.getName());
 		attackLabel.repaint();
 		defenseLabel.repaint();
 		expLabel.repaint();
@@ -66,27 +65,24 @@ public class EnemyPanel extends JPanel {
 	public void updateEnemy(Enemy enemy) {
 
 		this.enemy = enemy;
-		System.out.println(String.format("Updating enemy: %s - %d/%d", enemy.getName(), enemy.getHp(), enemy.getMaxHp()));
 		((HpLabel) enemyHp).updateCharacter(this.enemy);
-		((TextLabel) enemyName).updateName(this.enemy.getName());
-		((TextLabel) attackLabel).setDisplayText(String.format("FUE: %d", this.enemy.getStats().get(Stats.ATTACK)));
-		((TextLabel) defenseLabel).setDisplayText(String.format("DEF: %d", this.enemy.getStats().get(Stats.DEFENSE)));
+		enemyName.setText(enemy.getName());
+		((TextLabel) attackLabel).setDisplayText(String.format("FUE: %d", this.enemy.getAdjustedAttack()));
+		((TextLabel) defenseLabel).setDisplayText(String.format("DEF: %d", this.enemy.getAdjustedDefense()));
 		((TextLabel) expLabel).setDisplayText(String.format("EXP: %d", this.enemy.getExperience()));
 		((TextLabel) golldLabel).setDisplayText(String.format("ORO: %d", this.enemy.getGold()));
-		enemyName.repaint();
 		attackLabel.repaint();
 		defenseLabel.repaint();
 		expLabel.repaint();
 		golldLabel.repaint();
-		paintComponents(getGraphics());
+		repaint();
 	}
 
 	private void createUIComponents() {
 
-		enemyName = new TextLabel(enemy.getName());
 		enemyHp = new HpLabel(enemy);
-		attackLabel = new TextLabel(String.format("FUE: %d", enemy.getStats().get(Stats.ATTACK)), "textHolder");
-		defenseLabel = new TextLabel(String.format("DEF: %d", enemy.getStats().get(Stats.DEFENSE)), "textHolder");
+		attackLabel = new TextLabel(String.format("FUE: %d", enemy.getAdjustedAttack()), "textHolder");
+		defenseLabel = new TextLabel(String.format("DEF: %d", enemy.getAdjustedDefense()), "textHolder");
 		expLabel = new TextLabel(String.format("EXP: %d", enemy.getExperience()), "textHolder");
 		golldLabel = new TextLabel(String.format("ORO: %d", enemy.getGold()), "textHolder");
 	}

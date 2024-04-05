@@ -36,13 +36,12 @@ public class PlayerPanel extends JPanel {
 
 		this.player = player;
 		background = ImageManager.getInstance().getImage("playerPanel");
-		add(backgroundPanel);
-		setPreferredSize(backgroundPanel.getPreferredSize());
 		Dimension size = new Dimension(background.getWidth(null), background.getHeight(null));
 		setPreferredSize(size);
 		setMaximumSize(size);
 		setMinimumSize(size);
 		setOpaque(false);
+		add(backgroundPanel);
 	}
 
 	public void updatePlayer(Player player) {
@@ -51,6 +50,8 @@ public class PlayerPanel extends JPanel {
 		((HpLabel) hpLabel).updateCharacter(player);
 		((MpLabel) mpLabel).updateCharacter(player);
 		mpLabel.repaint();
+		((TextLabel)levelLabel).setDisplayText(String.format("Nivel: %d", player.getLevel()));
+		levelLabel.repaint();
 	}
 
 	public void paintComponent(Graphics g) {

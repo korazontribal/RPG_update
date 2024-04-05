@@ -11,40 +11,6 @@ public class TextLabel extends JLabel {
 	private final Image image;
 	private String displayText;
 
-	public TextLabel(String displayText) {
-
-		this.displayText = displayText;
-		this.image = null;
-		int textWidth = FontManager.getInstance().getFont("Player").getSize() * displayText.length();
-		int textHeight = FontManager.getInstance().getFont("Player").getSize();
-		Dimension size = new Dimension(textWidth, textHeight + 10);
-		setPreferredSize(size);
-		setMinimumSize(size);
-		setMaximumSize(size);
-		setSize(size);
-		Font font = FontManager.getInstance().getFont("Player");
-		setForeground(new Color(95, 0, 0, 255));
-		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-		setFont(font);
-	}
-
-	public TextLabel(String displayText, Color color) {
-
-		this.displayText = displayText;
-		this.image = null;
-		int textWidth = FontManager.getInstance().getFont("Player").getSize() * displayText.length();
-		int textHeight = FontManager.getInstance().getFont("Player").getSize();
-		Dimension size = new Dimension(580, textHeight + 10);
-		setPreferredSize(size);
-		setMinimumSize(size);
-		setMaximumSize(size);
-		setSize(size);
-		Font font = FontManager.getInstance().getFont("Player");
-		setForeground(color);
-		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-		setFont(font);
-	}
-
 	public TextLabel(String displayText, String imageKey) {
 
 		this.displayText = displayText;
@@ -73,7 +39,7 @@ public class TextLabel extends JLabel {
 			int textPositionX = (image.getWidth(null) - g2d.getFontMetrics().stringWidth(displayText)) / 2;
 			g2d.drawString(displayText, textPositionX, textPositionY);
 		} else {
-			int textPositionY = 10 + g2d.getFontMetrics().getHeight() / 4;
+			int textPositionY = g2d.getFontMetrics().getHeight() / 4;
 			int textPositionX = g2d.getFontMetrics().stringWidth(displayText) / 2;
 			g2d.drawString(displayText, textPositionX, textPositionY);
 		}
@@ -82,19 +48,6 @@ public class TextLabel extends JLabel {
 	public Image getImage() {
 
 		return image;
-	}
-
-	public void updateName(String name) {
-
-		displayText = name;
-		int textWidth = FontManager.getInstance().getFont("Player").getSize() * displayText.length();
-		int textHeight = FontManager.getInstance().getFont("Player").getSize();
-		Dimension size = new Dimension(textWidth, textHeight + 10);
-		setPreferredSize(size);
-		setMinimumSize(size);
-		setMaximumSize(size);
-		setSize(size);
-		repaint();
 	}
 
 	public void setDisplayText(String displayText) {

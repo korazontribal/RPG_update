@@ -24,7 +24,7 @@ public class ActionsPanel extends JTabbedPane {
 	private ActionsPanel() {
 
 		super();
-		Dimension size = new Dimension(1719, 480);
+		Dimension size = new Dimension(1280, 338);
 		setPreferredSize(size);
 		setMinimumSize(size);
 		setMaximumSize(size);

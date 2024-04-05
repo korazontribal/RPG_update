@@ -1,13 +1,11 @@
 package gui.panels;
 
 import enemies.Enemy;
-import gui.buttons.BackGroundButton;
 import gui.events.SkillButtonAction;
 import gui.game.GameWindow;
-import gui.labels.TextLabel;
 import player.Player;
-import player.skills.BasicHeal;
 import player.skills.Skill;
+import util.managers.FontManager;
 import util.managers.ImageManager;
 
 import javax.swing.*;
@@ -26,6 +24,11 @@ public class SkillDetailPanel extends JPanel {
 
 		this.skill = skill;
 		skillBanner = ImageManager.getInstance().getImage("skillDetailPanel");
+		Font font = FontManager.getInstance().getFont("Player");
+		skillDescription.setFont(font);
+		skillName.setFont(font);
+		skillName.setText(String.format("%s - %d MP", skill.getName(), skill.getManaCost()));
+		skillDescription.setText(skill.getDescription());
 		add(backgroundPanel);
 		Dimension size = new Dimension(skillBanner.getWidth(null), skillBanner.getHeight(null));
 		setPreferredSize(size);
@@ -51,8 +54,6 @@ public class SkillDetailPanel extends JPanel {
 
 	private void createUIComponents() {
 
-		skillName = new TextLabel(skill.getName(), new Color(11, 11, 11, 255));
-		skillDescription = new TextLabel(skill.getDescription(), new Color(46, 123, 38, 255));
 		skillCallButton = new JButton();
 		skillCallButton.setIcon(new ImageIcon(ImageManager.getInstance().getImage("skillButtonIdle")));
 		skillCallButton.setCursor(new Cursor(Cursor.HAND_CURSOR));

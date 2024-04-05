@@ -25,8 +25,6 @@ public class SpriteLabel extends JLabel {
 
 		this.img= img;
 		Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
-		System.out.println(getBounds());
-		setBounds(0, 0, size.width, size.height);
 		setPreferredSize(size);
 		setMinimumSize(size);
 		setMaximumSize(size);

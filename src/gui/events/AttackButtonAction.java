@@ -60,8 +60,11 @@ public class AttackButtonAction implements ActionListener {
 			enemy = EnemyFactory.generateRegularEnemy(player);
 			GameWindow.getInstance().setEnemy(enemy);
 			CharactersPanel.getInstance(player, enemy, window).updateEnemy(enemy);
+			EnemyPanel.getInstance(enemy).updateEnemy(enemy);
+		}else {
+			EnemyPanel.getInstance(enemy).updateEnemy();
 		}
-		EnemyPanel.getInstance(enemy).updateEnemy();
 		PlayerPanel.getInstance(player).updatePlayer(player);
+
 	}
 }

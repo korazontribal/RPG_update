@@ -21,8 +21,8 @@ public class FontManager {
 
 		fontCache.addFont("Game Title", new File("fonts\\fortune.otf"),24f);
 		fontCache.addFont("Game File", new File("fonts\\player.ttf"), 20f);
-		fontCache.addFont("Player Status", new File("fonts\\player.ttf"), 24f);
-		fontCache.addFont("Player", new File("fonts\\player.ttf"), 18f);
+		fontCache.addFont("Player Status", new File("fonts\\player.ttf"), 16f);
+		fontCache.addFont("Player", new File("fonts\\player.ttf"), 16f);
 	}
 
 	public static FontManager getInstance() {

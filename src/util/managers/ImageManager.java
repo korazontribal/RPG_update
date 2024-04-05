@@ -107,8 +107,6 @@ public class ImageManager {
 				new ImageIcon("img\\ui\\holders\\resHolder.png").getImage());
 		imageCache.addImage("velHolder",
 				new ImageIcon("img\\ui\\holders\\velHolder.png").getImage());
-		imageCache.addImage("skillBanner",
-				new ImageIcon("img\\ui\\holders\\skillBanner.png").getImage());
 		imageCache.addImage("weaponHolder",
 				new ImageIcon("img\\ui\\holders\\weaponHolder.png").getImage());
 		imageCache.addImage("textHolder",

@@ -4,11 +4,11 @@ import characters.BasicCharacter;
 import enemies.Enemy;
 import game.exceptions.PlayerDeathException;
 import gui.game.GameWindow;
+import gui.panels.ActionsPanel;
 import gui.panels.CharactersPanel;
 import gui.panels.DialogPanel;
-import gui.panels.EnemyPanel;
+import gui.panels.StatusPanel;
 import items.armors.Armor;
-import items.armors.ArmorType;
 import items.weapons.Weapon;
 import org.jetbrains.annotations.NotNull;
 import player.jobs.Job;
@@ -187,6 +187,7 @@ public class Player extends BasicCharacter implements Serializable {
 		message += gainGold(enemy.getGold());
 		((DialogPanel) panel.getDialogPanel()).getText().append(message);
 		enemy.dropItem(this, panel);
+		StatusPanel.getInstance(ActionsPanel.getInstance(), 0, panel.getPlayer()).update();
 	}
 
 	public String getActualHp() {
@@ -431,7 +432,10 @@ public class Player extends BasicCharacter implements Serializable {
 			maxMp += 3;
 			hp = maxHp;
 			mp = maxMp;
+			strength += Randomized.randomizeNumber(1, 3);
+			defense += Randomized.randomizeNumber(1, 3);
 			randomizeStats(5);
+			GameWindow.getInstance().getStatusPanel().update(this);
 			return String.format("¡%s ha subido al nivel %d!\n", getName(), level);
 		} else {
 			return "";

@@ -115,7 +115,7 @@ public class AloneWolf extends Enemy {
 	 */
 	public String bite(Player player) {
 
-		int totalDamage = getDamage(player) + 3;
+		int totalDamage = getAdjustedAttack() + 1;
 		String message = String.format("¡%s muerde con %d punto(s) de daño!\n", getName(), totalDamage);
 		return message + player.takeDamage(totalDamage);
 	}

@@ -23,14 +23,14 @@ public class BasicHeal extends Skill {
 
 	private BasicHeal() {
 
-		super(NAME, "Cura al jugador 5 puntos de vida", 3, 5);
+		super(NAME, "Cura al jugador 8 puntos de vida", 3, 5);
 	}
 
 	@Override
 	public String effect(Player player) {
 
-		player.heal(5);
-		return String.format("¡%s ha sido curado por 5 puntos de vida!", player.getName());
+		player.heal(8);
+		return String.format("¡%s ha sido curado por 8 puntos de vida!", player.getName());
 	}
 
 	@Override

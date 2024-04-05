@@ -1,7 +1,8 @@
 package gui.panels;
 
+import gui.labels.StatLabel;
+import gui.labels.TextLabel;
 import player.Player;
-import util.managers.FontManager;
 import util.managers.ImageManager;
 
 import javax.swing.*;
@@ -12,21 +13,42 @@ import java.awt.event.ComponentEvent;
 public class StatusPanel extends JPanel {
 
 	private final Image img;
+	private Player player;
+	private static StatusPanel instance;
 	private final ActionsPanel actionsPanel;
 	private final int tabIndex;
 	private final ImageIcon activeIcon;
 	private final ImageIcon inactiveIcon;
-	private final Player player;
+	private JPanel backgroundPanel;
+	private JLabel expLabel;
+	private JLabel strLabel;
+	private JLabel defLabel;
+	private JLabel goldLabel;
+	private JLabel intLabel;
+	private JLabel resLabel;
+	private JLabel luckLabel;
+	private JLabel desLabel;
+	private JLabel velLabel;
+	private JLabel headArmorLabel;
+	private JLabel chestArmorLabel;
+	private JLabel legsArmorLabel;
+	private JLabel foodArmorLabel;
+	private JLabel handsArmorLabel;
+	private JLabel weaponArmorLabel;
 
-	public StatusPanel(ActionsPanel actionsPanel, int tabIndex, Player player) {
+	private StatusPanel(ActionsPanel actionsPanel, int tabIndex, Player player) {
 
 		this.player = player;
 		ImageManager imageManager = ImageManager.getInstance();
-		this.img = imageManager.getImage("statusPanel");
+		img = imageManager.getImage("statusPanel");
 		this.tabIndex = tabIndex;
 		this.activeIcon = new ImageIcon(imageManager.getImage("statusTabActive"));
 		this.inactiveIcon = new ImageIcon(imageManager.getImage("statusTabInactive"));
 		this.actionsPanel = actionsPanel;
+		add(backgroundPanel);
+		setOpaque(false);
+		setBackground(null);
+		setMixingCutoutShape(new Rectangle(0, 0, 0, 0));
 		actionsPanel.addTab("Status", this);
 		actionsPanel.setTabIcon(tabIndex, isActive() ? activeIcon : inactiveIcon);
 		addComponentListener(new ComponentAdapter() {
@@ -44,151 +66,100 @@ public class StatusPanel extends JPanel {
 		});
 	}
 
+	public void update(Player player) {
+
+		this.player = player;
+		repaint();
+	}
+
 	private boolean isActive() {
 
 		return actionsPanel.getSelectedIndex() == tabIndex;
 	}
 
-	public void paintComponent(Graphics g) {
+	public static StatusPanel getInstance(ActionsPanel actionsPanel, int tabIndex, Player player) {
+
+		if (instance == null) {
+
+			instance = new StatusPanel(actionsPanel, tabIndex, player);
+		}
+		return instance;
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		ImageManager imageManager = ImageManager.getInstance();
-		Image image;
-		String message;
-		int textPositionX = 70;
-		int textPositionY;
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(img, 0, 0, getWidth(), getHeight(), null);
-		g2d.setColor(Color.BLACK);
-		g2d.setFont(FontManager.getInstance().getFont("Player Status"));
-		//Primer Columna
-		//Exp
-		image = imageManager.getImage("expHolder");
-		g2d.translate(50, 10);
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = String.format("EXP: %d", player.getExperience());
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null) + 5);
-		//Ataque
-		image = imageManager.getImage("attackHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getTotalAttack();
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null) + 5);
-		//Defensa
-		image = imageManager.getImage("defenseHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getTotalDefense();
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		//Segunda Columna
-		g2d.translate(image.getWidth(null) + 15 - textPositionX,
-				-textPositionY - 2 * (image.getHeight(null) + 5));
-		//Oro
-		image = imageManager.getImage("goldHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = String.format("ORO: %d", player.getGold());
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null) + 5);
-		//Inteligencia
-		image = imageManager.getImage("intelligenceHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getTotalIntelligence();
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null) + 5);
-		//Resistencia
-		image = imageManager.getImage("resHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getTotalResistance();
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		//Tercera Columna
-		g2d.translate(image.getWidth(null) + 15 - textPositionX,
-				-textPositionY - 2 * (image.getHeight(null) + 5));
-		//Suerte
-		image = imageManager.getImage("luckHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getTotalLuck();
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null) + 5);
-		//Habilidad
-		image = imageManager.getImage("dexterityHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getTotalDexterity();
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null) + 5);
-		//Velocidad
-		image = imageManager.getImage("velHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getTotalSpeed();
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		//Cuarta Columna
-		g2d.translate(image.getWidth(null) + 15 - textPositionX,
-				-textPositionY - 2 * (image.getHeight(null) + 5));
-		//Cabeza
-		image = imageManager.getImage("headArmorHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getHeadArmor() != null ? player.getHeadArmor().getName() : "Ninguno";
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null));
-		//Pecho
-		image = imageManager.getImage("chestArmorHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getChestArmor() != null ? player.getChestArmor().getName() : "Ninguno";
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null));
-		//Piernas
-		image = imageManager.getImage("legArmorHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getLegArmor() != null ? player.getLegArmor().getName() : "Ninguno";
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		//Quinta Columna
-		g2d.translate(image.getWidth(null) + 15 - textPositionX,
-				-textPositionY - (2 * (image.getHeight(null)))-1.5);
-		//Pies
-		image = imageManager.getImage("feetArmorHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getFootArmor() != null ? player.getFootArmor().getName() : "Ninguno";
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null));
-		//Manos
-		image = imageManager.getImage("handArmorHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getHandArmor() != null ? player.getHandArmor().getName() : "Ninguno";
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
-		g2d.translate(-textPositionX, -textPositionY + image.getHeight(null));
-		//Arma
-		image = imageManager.getImage("weaponHolder");
-		g2d.drawImage(image, 0, 0, image.getWidth(null), image.getHeight(null), null);
-		message = player.getWeapon() != null ? player.getWeapon().getName() : "Ninguno";
-		textPositionY = image.getHeight(null) / 2 + g2d.getFontMetrics(g2d.getFont()).getHeight() / 2 - 10;
-		g2d.translate(textPositionX, textPositionY);
-		g2d.drawString(message, 0, 0);
+		g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+	}
+
+	public void update() {
+
+		((StatLabel)expLabel).setDisplayText("EXP: " + player.getExperience());
+		((StatLabel)strLabel).setDisplayText(player.getTotalAttack());
+		((StatLabel)defLabel).setDisplayText(player.getTotalDefense());
+		((StatLabel)goldLabel).setDisplayText("ORO: " + player.getGold());
+		((StatLabel)intLabel).setDisplayText(player.getTotalIntelligence());
+		((StatLabel)resLabel).setDisplayText(player.getTotalResistance());
+		((StatLabel)luckLabel).setDisplayText(player.getTotalLuck());
+		((StatLabel)desLabel).setDisplayText(player.getTotalDexterity());
+		((StatLabel)velLabel).setDisplayText(player.getTotalSpeed());
+		String weaponName = player.getHeadArmor() != null ? player.getHeadArmor().getName() : "Ninguno";
+		String headArmorName = player.getHeadArmor() != null ? player.getHeadArmor().getName() : "Ninguno";
+		String chestArmorName = player.getChestArmor() != null ? player.getChestArmor().getName() : "Ninguno";
+		String legsArmorName = player.getLegArmor() != null ? player.getLegArmor().getName() : "Ninguno";
+		String footArmorName = player.getFootArmor() != null ? player.getFootArmor().getName() : "Ninguno";
+		String handArmorName = player.getHandArmor() != null ? player.getHandArmor().getName() : "Ninguno";
+		((StatLabel)weaponArmorLabel).setDisplayText(weaponName);
+		((StatLabel)headArmorLabel).setDisplayText(headArmorName);
+		((StatLabel)chestArmorLabel).setDisplayText(chestArmorName);
+		((StatLabel)legsArmorLabel).setDisplayText(legsArmorName);
+		((StatLabel)foodArmorLabel).setDisplayText(footArmorName);
+		((StatLabel)handsArmorLabel).setDisplayText(handArmorName);
+		repaint();
+	}
+
+	private void createUIComponents() {
+
+		backgroundPanel = new JPanel();
+		backgroundPanel.setOpaque(false);
+		backgroundPanel.setBackground(null);
+		backgroundPanel.setMixingCutoutShape(new Rectangle(0, 0, 0, 0));
+		expLabel = new StatLabel("EXP: " + player.getExperience(),
+				ImageManager.getInstance().getImage("expHolder"));
+		strLabel = new StatLabel(player.getTotalAttack(),
+				ImageManager.getInstance().getImage("attackHolder"));
+		defLabel = new StatLabel(player.getTotalDefense(),
+				ImageManager.getInstance().getImage("defenseHolder"));
+		goldLabel = new StatLabel("ORO: " + player.getGold(),
+				ImageManager.getInstance().getImage("goldHolder"));
+		intLabel = new StatLabel(player.getTotalIntelligence(),
+				ImageManager.getInstance().getImage("intelligenceHolder"));
+		resLabel = new StatLabel(player.getTotalResistance(),
+				ImageManager.getInstance().getImage("resHolder"));
+		luckLabel = new StatLabel(player.getTotalLuck(),
+				ImageManager.getInstance().getImage("luckHolder"));
+		desLabel = new StatLabel(player.getTotalDexterity(),
+				ImageManager.getInstance().getImage("dexterityHolder"));
+		velLabel = new StatLabel(player.getTotalSpeed(),
+				ImageManager.getInstance().getImage("velHolder"));
+		String weaponName = player.getHeadArmor() != null ? player.getHeadArmor().getName() : "Ninguno";
+		String headArmorName = player.getHeadArmor() != null ? player.getHeadArmor().getName() : "Ninguno";
+		String chestArmorName = player.getChestArmor() != null ? player.getChestArmor().getName() : "Ninguno";
+		String legsArmorName = player.getLegArmor() != null ? player.getLegArmor().getName() : "Ninguno";
+		String footArmorName = player.getFootArmor() != null ? player.getFootArmor().getName() : "Ninguno";
+		String handArmorName = player.getHandArmor() != null ? player.getHandArmor().getName() : "Ninguno";
+		weaponArmorLabel = new StatLabel("ARMA: " + weaponName,
+				ImageManager.getInstance().getImage("weaponHolder"));
+		headArmorLabel = new StatLabel("CABEZA: " + headArmorName,
+				ImageManager.getInstance().getImage("headArmorHolder"));
+		chestArmorLabel = new StatLabel("PECHO: " + chestArmorName,
+				ImageManager.getInstance().getImage("chestArmorHolder"));
+		legsArmorLabel = new StatLabel("PIERNAS: " + legsArmorName,
+				ImageManager.getInstance().getImage("legArmorHolder"));
+		foodArmorLabel = new StatLabel("PIES: " + footArmorName,
+				ImageManager.getInstance().getImage("feetArmorHolder"));
+		handsArmorLabel = new StatLabel("MANOS: " + handArmorName,
+				ImageManager.getInstance().getImage("handArmorHolder"));
 	}
 }

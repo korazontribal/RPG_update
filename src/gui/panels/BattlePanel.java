@@ -17,7 +17,7 @@ import java.awt.event.ComponentEvent;
 
 public class BattlePanel extends JPanel {
 
-	private final Image img;
+	private Image img;
 	private final ActionsPanel actionsPanel;
 	private final int tabIndex;
 	private final ImageIcon activeIcon;
@@ -43,6 +43,7 @@ public class BattlePanel extends JPanel {
 		this.inactiveIcon = new ImageIcon(imageManager.getImage("battleTabInactive"));
 		this.actionsPanel = actionsPanel;
 		actionsPanel.addTab("Battle", this);
+		setMixingCutoutShape(new Rectangle(0, 0, 0, 0));
 		actionsPanel.setTabIcon(tabIndex, isActive() ? activeIcon : inactiveIcon);
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -61,9 +62,12 @@ public class BattlePanel extends JPanel {
 		attackButton.addActionListener(new AttackButtonAction(player, enemy, window));
 	}
 
-	public void updateEnemy(Enemy enemy) {
+	@Override
+	protected void paintComponent(Graphics g) {
 
-		this.enemy = enemy;
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.drawImage(img, 0, 0, getWidth(), getHeight(), null);
 	}
 
 	private boolean isActive() {
@@ -73,14 +77,6 @@ public class BattlePanel extends JPanel {
 
 	private void createUIComponents() {
 
-		mainPanel = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-
-				super.paintComponent(g);
-				g.drawImage(img, 0, 0, null);
-			}
-		};
 		skillBanner = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -89,8 +85,6 @@ public class BattlePanel extends JPanel {
 				g.drawImage(ImageManager.getInstance().getImage("skillBanner"), 0, 0, null);
 			}
 		};
-		mainPanel.setOpaque(false);
-		mainPanel.setLayout(null);
 		skillsPanel = new SkillPanel(player, enemy, window);
 		attackButton = new JButton();
 		attackButton.setIcon(new ImageIcon(ImageManager.getInstance().getImage("attackButtonIdle")));
