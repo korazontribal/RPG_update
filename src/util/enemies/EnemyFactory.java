@@ -1,7 +1,7 @@
 package util.enemies;
 
 import enemies.Enemy;
-import enemies.bats.TinyBat;
+import enemies.slimes.SlimeDark;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -36,7 +36,7 @@ public class EnemyFactory {
 			return (Enemy) claseEnemyRegular.getDeclaredConstructor(Player.class).newInstance(player);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new TinyBat(player);
+			return new SlimeDark(player);
 		}
 	}
 

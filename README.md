@@ -1,2 +1,2 @@
 # juego
-Equipo conformado por: Integrante 1, Integrante 2, Integrante 3
+Equipo conformado por: Diego Alberto Blancas Serrano, Rodrigo Alejandro Álvarez Acosta

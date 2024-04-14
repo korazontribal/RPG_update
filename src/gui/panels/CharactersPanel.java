@@ -1,9 +1,6 @@
 package gui.panels;
 
 import enemies.Enemy;
-import enemies.bats.TinyBat;
-import game.exceptions.EnemyDeadException;
-import game.exceptions.PlayerDeathException;
 import gui.game.GameWindow;
 import gui.labels.SpriteLabel;
 import player.Player;

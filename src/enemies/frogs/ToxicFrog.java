@@ -1,4 +1,4 @@
-package enemies.wolfs;
+package enemies.frogs;
 
 import enemies.Enemy;
 import game.exceptions.EnemyDeadException;
@@ -9,7 +9,6 @@ import items.misc.WolfFur;
 import player.Player;
 import player.Stats;
 import util.annotations.RegularEnemy;
-import util.interfaces.Interactive;
 import util.interfaces.Randomized;
 
 import javax.swing.*;
@@ -22,12 +21,12 @@ import javax.swing.*;
  * El método bite permite que AloneWolf muerda al jugador provocando una cantidad determinada de daño.
  */
 @RegularEnemy
-public class AloneWolf extends Enemy {
+public class ToxicFrog extends Enemy {
 
 	/**
 	 * Constructor de la clase Lobo solitario.
 	 */
-	public AloneWolf(Player player) {
+	public ToxicFrog(Player player) {
 
 		super(player, "Lobo solitario", 10, 10, 5, 4);
 		image = imageManager.getImage("aloneWolf",

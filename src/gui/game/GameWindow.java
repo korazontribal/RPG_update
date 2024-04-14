@@ -1,7 +1,7 @@
 package gui.game;
 
 import enemies.Enemy;
-import enemies.goblins.RookieGoblin;
+import enemies.bunnies.WindBunny;
 import gui.panels.*;
 import player.Player;
 
@@ -59,7 +59,7 @@ public class GameWindow extends JFrame {
 		player = new Player("Miguel");
 		player.gainExperience(18);
 		//enemy = EnemyFactory.generateRegularEnemy(player);
-		enemy = new RookieGoblin(player);
+		enemy = new WindBunny(player);
 		playerPanel = PlayerPanel.getInstance(player);
 		enemyPanel = EnemyPanel.getInstance(enemy);
 		charactersPanel = CharactersPanel.getInstance(player, enemy, this);

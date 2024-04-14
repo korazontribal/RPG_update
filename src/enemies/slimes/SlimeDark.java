@@ -1,4 +1,4 @@
-package enemies.bats;
+package enemies.slimes;
 
 import enemies.Enemy;
 import game.exceptions.EnemyDeadException;
@@ -9,15 +9,14 @@ import items.misc.BatWing;
 import player.Player;
 import player.Stats;
 import util.annotations.RegularEnemy;
-import util.interfaces.Interactive;
 import util.interfaces.Randomized;
 
 import javax.swing.*;
 
 @RegularEnemy
-public class TinyBat extends Enemy {
+public class SlimeDark extends Enemy {
 
-	public TinyBat(Player player) {
+	public SlimeDark(Player player) {
 
 		super(player, "Murciélago diminuto", 5, 5, 5, 3);
 		image = imageManager.getImage("tinyBat",

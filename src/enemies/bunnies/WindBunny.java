@@ -1,4 +1,4 @@
-package enemies.goblins;
+package enemies.bunnies;
 
 import enemies.Enemy;
 import game.exceptions.EnemyDeadException;
@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import player.Player;
 import player.Stats;
 import util.annotations.RegularEnemy;
-import util.interfaces.Interactive;
 import util.interfaces.Randomized;
 
 import javax.swing.*;
@@ -24,12 +23,12 @@ import javax.swing.*;
  * El método stealGold permite al RookieGoblin robar una cantidad determinada de oro del jugador.
  */
 @RegularEnemy
-public class RookieGoblin extends Enemy {
+public class WindBunny extends Enemy {
 
 	/**
 	 * Constructor de la clase RookieGoblin.
 	 */
-	public RookieGoblin(Player player) {
+	public WindBunny(Player player) {
 
 		super(player, "Duende novato", 5, 5, 5, 2);
 		image = imageManager.getImage("rookieGoblin",
